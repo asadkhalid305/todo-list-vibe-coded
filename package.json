@@ -1,0 +1,26 @@
+{
+  "name": "todo-app-with-ai",
+  "version": "1.0.0",
+  "description": "Responsive To-Do List application built with Vue 3",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.0.0",
+    "vite": "^5.0.0"
+  },
+  "keywords": [
+    "vue",
+    "todo",
+    "responsive",
+    "composition-api"
+  ],
+  "author": "GitHub Copilot",
+  "license": "MIT"
+}
