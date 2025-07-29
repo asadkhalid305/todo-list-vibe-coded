@@ -79,7 +79,7 @@ const selectFilter = (filterValue) => {
 <style scoped>
 .filter-tabs {
   display: flex;
-  background-color: var(--gray-100);
+  background-color: var(--bg-tertiary);
   border-radius: var(--radius-lg);
   padding: var(--space-1);
   gap: var(--space-1);
@@ -94,7 +94,7 @@ const selectFilter = (filterValue) => {
   padding: var(--space-3) var(--space-4);
   border-radius: var(--radius-md);
   background-color: transparent;
-  color: var(--gray-600);
+  color: var(--text-secondary);
   font-weight: 500;
   font-size: var(--font-size-sm);
   cursor: pointer;
@@ -105,13 +105,13 @@ const selectFilter = (filterValue) => {
 }
 
 .filter-tabs__tab:hover:not(.filter-tabs__tab--active) {
-  background-color: var(--white);
-  color: var(--gray-700);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
 }
 
 .filter-tabs__tab--active {
-  background-color: var(--white);
-  color: var(--primary-color);
+  background-color: var(--bg-secondary);
+  color: var(--purple-600);
   box-shadow: var(--shadow-sm);
 }
 
@@ -126,8 +126,8 @@ const selectFilter = (filterValue) => {
   min-width: 1.25rem;
   height: 1.25rem;
   padding: 0 var(--space-1);
-  background-color: var(--gray-200);
-  color: var(--gray-600);
+  background-color: var(--slate-200);
+  color: var(--slate-600);
   font-size: var(--font-size-xs);
   font-weight: 600;
   border-radius: var(--radius-lg);
@@ -135,8 +135,8 @@ const selectFilter = (filterValue) => {
 }
 
 .filter-tabs__tab--active .filter-tabs__count {
-  background-color: var(--primary-color);
-  color: var(--white);
+  background-color: var(--purple-600);
+  color: var(--purple-50);
 }
 
 /* Mobile optimizations */

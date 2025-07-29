@@ -100,8 +100,8 @@ defineExpose({
 
 .input:focus {
   outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  border-color: var(--purple-600);
+  box-shadow: 0 0 0 3px var(--purple-100);
 }
 
 .input::placeholder {
@@ -129,12 +129,12 @@ defineExpose({
 
 /* Error state */
 .input--error {
-  border-color: var(--danger-color);
+  border-color: var(--red-600);
 }
 
 .input--error:focus {
-  border-color: var(--danger-color);
-  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  border-color: var(--red-600);
+  box-shadow: 0 0 0 3px var(--red-100);
 }
 
 /* Disabled state */

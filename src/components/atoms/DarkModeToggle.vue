@@ -96,14 +96,22 @@ const toggleTheme = () => {
   position: relative;
   width: 3.5rem;
   height: 1.75rem;
-  background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+  background: linear-gradient(
+    135deg,
+    var(--purple-400) 0%,
+    var(--purple-500) 100%
+  );
   border-radius: var(--radius-xl);
   transition: all var(--transition-normal);
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .dark-mode-toggle--dark .dark-mode-toggle__track {
-  background: linear-gradient(135deg, #1e40af 0%, #1d4ed8 100%);
+  background: linear-gradient(
+    135deg,
+    var(--purple-800) 0%,
+    var(--purple-700) 100%
+  );
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
@@ -113,7 +121,7 @@ const toggleTheme = () => {
   left: 0.125rem;
   width: 1.5rem;
   height: 1.5rem;
-  background: var(--white);
+  background: var(--bg-secondary);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -125,7 +133,7 @@ const toggleTheme = () => {
 
 .dark-mode-toggle__thumb--dark {
   transform: translateX(1.75rem);
-  background: var(--bg-secondary);
+  background: var(--slate-800);
 }
 
 .dark-mode-toggle__icon {
@@ -135,12 +143,12 @@ const toggleTheme = () => {
 }
 
 .dark-mode-toggle__icon--sun {
-  color: #f59e0b;
+  color: var(--purple-700);
   animation: sun-rays 2s ease-in-out infinite alternate;
 }
 
 .dark-mode-toggle__icon--moon {
-  color: #60a5fa;
+  color: var(--purple-300);
   animation: moon-glow 3s ease-in-out infinite alternate;
 }
 

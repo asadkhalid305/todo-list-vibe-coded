@@ -88,13 +88,15 @@ const buttonClasses = computed(() => [
 
 /* Color variants */
 .btn--primary {
-  background-color: var(--primary-color);
-  color: var(--white);
+  background-color: var(--purple-700);
+  color: var(--purple-50);
+  border: 1px solid var(--purple-700);
   box-shadow: var(--shadow-sm);
 }
 
 .btn--primary:hover:not(.btn--disabled) {
-  background-color: var(--primary-hover);
+  background-color: var(--purple-800);
+  border-color: var(--purple-800);
   box-shadow: var(--shadow-md);
   transform: translateY(-1px);
 }
@@ -113,25 +115,29 @@ const buttonClasses = computed(() => [
 }
 
 .btn--danger {
-  background-color: var(--danger-color);
-  color: var(--white);
+  background-color: var(--red-600);
+  color: var(--red-50);
+  border: 1px solid var(--red-600);
   box-shadow: var(--shadow-sm);
 }
 
 .btn--danger:hover:not(.btn--disabled) {
-  background-color: var(--danger-hover);
+  background-color: var(--red-700);
+  border-color: var(--red-700);
   box-shadow: var(--shadow-md);
   transform: translateY(-1px);
 }
 
 .btn--success {
-  background-color: var(--success-color);
-  color: var(--white);
+  background-color: var(--emerald-600);
+  color: var(--emerald-50);
+  border: 1px solid var(--emerald-600);
   box-shadow: var(--shadow-sm);
 }
 
 .btn--success:hover:not(.btn--disabled) {
-  background-color: #059669;
+  background-color: var(--emerald-700);
+  border-color: var(--emerald-700);
   box-shadow: var(--shadow-md);
   transform: translateY(-1px);
 }

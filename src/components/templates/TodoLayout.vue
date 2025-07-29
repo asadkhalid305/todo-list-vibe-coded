@@ -10,7 +10,16 @@
         <div class="todo-layout__header-content">
           <div class="todo-layout__title-section">
             <h1 class="todo-layout__title">
-              <span class="todo-layout__title-icon">✓</span>
+              <span class="todo-layout__title-icon">
+                <svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </span>
               To-Do List
             </h1>
             <p class="todo-layout__subtitle">
@@ -209,16 +218,13 @@ const handleThemeToggle = (isDark) => {
   justify-content: center;
   width: 2.5rem;
   height: 2.5rem;
-  background: linear-gradient(
-    135deg,
-    var(--primary-color),
-    var(--success-color)
-  );
-  color: var(--white);
+  background: linear-gradient(135deg, var(--purple-400), var(--purple-500));
+  color: var(--purple-50);
   border-radius: var(--radius-xl);
   font-size: var(--font-size-xl);
   font-weight: bold;
   box-shadow: var(--shadow-md);
+  transition: all var(--transition-normal);
 }
 
 .todo-layout__subtitle {
@@ -334,21 +340,27 @@ const handleThemeToggle = (isDark) => {
   }
 }
 
+/* Dark mode specific styles */
+[data-theme="dark"] .todo-layout__title-icon {
+  background: linear-gradient(135deg, var(--purple-800), var(--purple-700));
+  color: var(--purple-100);
+}
+
 /* High contrast mode */
 @media (prefers-contrast: high) {
   .todo-layout__title-icon {
-    background: var(--gray-900);
+    background: var(--slate-900);
   }
 
   .todo-layout__footer {
-    border-top-color: var(--gray-400);
+    border-top-color: var(--slate-400);
   }
 }
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .todo-layout {
-    background: var(--gray-50);
+    background: var(--bg-primary);
   }
 }
 </style>
