@@ -27,7 +27,7 @@
   --gray-800: #1f2937;
   --gray-900: #111827;
   --white: #ffffff;
-  
+
   /* Theme-aware colors */
   --bg-primary: var(--gray-50);
   --bg-secondary: var(--white);
@@ -89,7 +89,7 @@
   --success-color: #34d399;
   --danger-color: #f87171;
   --danger-hover: #ef4444;
-  
+
   /* Dark theme colors */
   --bg-primary: #0f172a;
   --bg-secondary: #1e293b;
@@ -101,7 +101,7 @@
   --border-secondary: #475569;
   --shadow-color: rgba(0, 0, 0, 0.3);
   --shadow-color-sm: rgba(0, 0, 0, 0.2);
-  
+
   /* Override specific grays for dark mode */
   --gray-50: #0f172a;
   --gray-100: #1e293b;
@@ -124,7 +124,8 @@ body {
   font-size: var(--font-size-base);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: background-color var(--transition-normal), color var(--transition-normal);
+  transition: background-color var(--transition-normal),
+    color var(--transition-normal);
 }
 
 /* Focus styles for accessibility */

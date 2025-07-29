@@ -11,60 +11,65 @@
     :aria-pressed="isDark"
   >
     <div class="dark-mode-toggle__track">
-      <div class="dark-mode-toggle__thumb" :class="{ 'dark-mode-toggle__thumb--dark': isDark }">
+      <div
+        class="dark-mode-toggle__thumb"
+        :class="{ 'dark-mode-toggle__thumb--dark': isDark }"
+      >
         <!-- Sun Icon (Light Mode) -->
-        <svg 
+        <svg
           v-if="!isDark"
           class="dark-mode-toggle__icon dark-mode-toggle__icon--sun"
-          viewBox="0 0 24 24" 
-          fill="none" 
+          viewBox="0 0 24 24"
+          fill="none"
           stroke="currentColor"
         >
-          <circle cx="12" cy="12" r="5"/>
-          <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+          <circle cx="12" cy="12" r="5" />
+          <path
+            d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"
+          />
         </svg>
-        
+
         <!-- Moon Icon (Dark Mode) -->
-        <svg 
+        <svg
           v-else
           class="dark-mode-toggle__icon dark-mode-toggle__icon--moon"
-          viewBox="0 0 24 24" 
-          fill="none" 
+          viewBox="0 0 24 24"
+          fill="none"
           stroke="currentColor"
         >
-          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
         </svg>
       </div>
     </div>
-    
+
     <!-- Label text for accessibility (visually hidden) -->
     <span class="sr-only">
-      {{ isDark ? 'Dark mode' : 'Light mode' }}
+      {{ isDark ? "Dark mode" : "Light mode" }}
     </span>
   </button>
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed } from "vue";
 
 // Props definition
 const props = defineProps({
   modelValue: {
     type: Boolean,
-    default: false
-  }
-})
+    default: false,
+  },
+});
 
 // Emits definition
-const emit = defineEmits(['update:modelValue'])
+const emit = defineEmits(["update:modelValue"]);
 
 // Computed properties
-const isDark = computed(() => props.modelValue)
+const isDark = computed(() => props.modelValue);
 
 // Methods
 const toggleTheme = () => {
-  emit('update:modelValue', !props.modelValue)
-}
+  emit("update:modelValue", !props.modelValue);
+};
 </script>
 
 <style scoped>
@@ -178,21 +183,21 @@ const toggleTheme = () => {
   .dark-mode-toggle {
     padding: var(--space-3);
   }
-  
+
   .dark-mode-toggle__track {
     width: 3rem;
     height: 1.5rem;
   }
-  
+
   .dark-mode-toggle__thumb {
     width: 1.25rem;
     height: 1.25rem;
   }
-  
+
   .dark-mode-toggle__thumb--dark {
     transform: translateX(1.5rem);
   }
-  
+
   .dark-mode-toggle__icon {
     width: 0.875rem;
     height: 0.875rem;
@@ -206,7 +211,7 @@ const toggleTheme = () => {
   .dark-mode-toggle__icon {
     transition: none;
   }
-  
+
   .dark-mode-toggle__icon--sun,
   .dark-mode-toggle__icon--moon {
     animation: none;
@@ -218,7 +223,7 @@ const toggleTheme = () => {
   .dark-mode-toggle__track {
     border: 2px solid currentColor;
   }
-  
+
   .dark-mode-toggle__thumb {
     border: 1px solid currentColor;
   }

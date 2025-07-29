@@ -6,13 +6,15 @@ I've successfully added a comprehensive dark mode feature to your Vue 3 To-Do ap
 
 ### ✨ Dark Mode Features
 
-1. **Beautiful Toggle Switch** 
+1. **Beautiful Toggle Switch**
+
    - 🌅 Morning sun icon for light mode
    - 🌙 Night moon icon for dark mode
    - Smooth sliding animation between states
    - Positioned in the top-right corner of the header
 
 2. **Smart Theme Detection**
+
    - Automatically detects system preference (light/dark)
    - Remembers user's manual selection in localStorage
    - Syncs across browser tabs
@@ -25,11 +27,13 @@ I've successfully added a comprehensive dark mode feature to your Vue 3 To-Do ap
 ### 🎨 Design Details
 
 **Light Mode:**
+
 - Clean, bright interface with light grays and whites
 - Blue primary accent color (#3b82f6)
 - High contrast for excellent readability
 
 **Dark Mode:**
+
 - Deep dark blue background (#0f172a)
 - Lighter blue accent colors for better visibility
 - Carefully chosen contrast ratios for accessibility
@@ -37,11 +41,13 @@ I've successfully added a comprehensive dark mode feature to your Vue 3 To-Do ap
 ### 📱 Responsive Behavior
 
 **Mobile (< 640px):**
+
 - Toggle switch moves to top-right corner
 - Slightly smaller toggle size for better mobile UX
 - Header layout adjusts to accommodate the toggle
 
 **Desktop:**
+
 - Toggle switch positioned elegantly in header
 - Larger, more prominent design
 - Beautiful hover and focus states
@@ -49,19 +55,21 @@ I've successfully added a comprehensive dark mode feature to your Vue 3 To-Do ap
 ### 🔧 Technical Implementation
 
 1. **CSS Variables System:**
+
    ```css
    :root {
-     --bg-primary: #f9fafb;      /* Light mode */
+     --bg-primary: #f9fafb; /* Light mode */
      --text-primary: #374151;
    }
-   
+
    [data-theme="dark"] {
-     --bg-primary: #0f172a;      /* Dark mode */
+     --bg-primary: #0f172a; /* Dark mode */
      --text-primary: #e2e8f0;
    }
    ```
 
 2. **Vue 3 State Management:**
+
    - Reactive dark mode state
    - localStorage persistence
    - System preference detection

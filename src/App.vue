@@ -33,9 +33,9 @@ const STORAGE_KEY = "vue-todo-app";
 // Theme management
 const applyTheme = (dark) => {
   if (dark) {
-    document.documentElement.setAttribute('data-theme', 'dark');
+    document.documentElement.setAttribute("data-theme", "dark");
   } else {
-    document.documentElement.removeAttribute('data-theme');
+    document.documentElement.removeAttribute("data-theme");
   }
 };
 
@@ -137,14 +137,16 @@ const loadFromStorage = () => {
       if (["all", "pending", "completed"].includes(parsed.currentFilter)) {
         currentFilter.value = parsed.currentFilter;
       }
-      
+
       if (typeof parsed.isDarkMode === "boolean") {
         isDarkMode.value = parsed.isDarkMode;
         applyTheme(parsed.isDarkMode);
       }
     } else {
       // Check for system preference if no saved setting
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
       isDarkMode.value = prefersDark;
       applyTheme(prefersDark);
     }
@@ -218,12 +220,15 @@ watch(
 
 // Watch for system theme changes
 watch(
-  () => window.matchMedia('(prefers-color-scheme: dark)').matches,
+  () => window.matchMedia("(prefers-color-scheme: dark)").matches,
   (prefersDark) => {
     // Only auto-update if user hasn't manually set a preference
-    const hasManualPreference = localStorage.getItem(STORAGE_KEY) && 
-      JSON.parse(localStorage.getItem(STORAGE_KEY)).hasOwnProperty('isDarkMode');
-    
+    const hasManualPreference =
+      localStorage.getItem(STORAGE_KEY) &&
+      JSON.parse(localStorage.getItem(STORAGE_KEY)).hasOwnProperty(
+        "isDarkMode"
+      );
+
     if (!hasManualPreference) {
       isDarkMode.value = prefersDark;
       applyTheme(prefersDark);

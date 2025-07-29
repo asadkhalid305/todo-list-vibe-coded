@@ -13,9 +13,11 @@
               <span class="todo-layout__title-icon">✓</span>
               To-Do List
             </h1>
-            <p class="todo-layout__subtitle">Stay organized and get things done</p>
+            <p class="todo-layout__subtitle">
+              Stay organized and get things done
+            </p>
           </div>
-          
+
           <!-- Dark Mode Toggle -->
           <div class="todo-layout__theme-toggle">
             <DarkModeToggle
@@ -155,7 +157,11 @@ const handleThemeToggle = (isDark) => {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-tertiary) 100%);
+  background: linear-gradient(
+    135deg,
+    var(--bg-primary) 0%,
+    var(--bg-tertiary) 100%
+  );
 }
 
 .todo-layout .container {
@@ -251,16 +257,16 @@ const handleThemeToggle = (isDark) => {
   .todo-layout__header {
     padding: var(--space-6) 0 var(--space-4) 0;
   }
-  
+
   .todo-layout__header-content {
     flex-direction: column;
     gap: var(--space-4);
   }
-  
+
   .todo-layout__title-section {
     order: 1;
   }
-  
+
   .todo-layout__theme-toggle {
     order: 0;
     align-self: flex-end;
