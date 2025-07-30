@@ -38,54 +38,42 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
+import type { FilterTabsProps, FilterTabsEmits } from "@/types/components";
+import type { FilterType } from "@/types/filter";
 
-// Props definition
-const props = defineProps({
-  currentFilter: {
-    type: String,
-    required: true,
-    validator: (value) => ["all", "pending", "completed"].includes(value),
-  },
-  totalTasks: {
-    type: Number,
-    default: 0,
-  },
-  completedTasks: {
-    type: Number,
-    default: 0,
-  },
-  pendingTasks: {
-    type: Number,
-    default: 0,
-  },
+// Props definition with TypeScript
+const props = withDefaults(defineProps<FilterTabsProps>(), {
+  totalTasks: 0,
+  completedTasks: 0,
+  pendingTasks: 0,
 });
 
-// Emits definition
-const emit = defineEmits(["filter-change"]);
+// Emits definition with TypeScript
+const emit = defineEmits<FilterTabsEmits>();
 
 // Computed filters with counts
 const filters = computed(() => [
   {
-    value: "all",
+    value: "all" as FilterType,
     label: "All",
     count: props.totalTasks,
   },
   {
-    value: "pending",
+    value: "pending" as FilterType,
     label: "Pending",
     count: props.pendingTasks,
   },
   {
-    value: "completed",
+    value: "completed" as FilterType,
     label: "Completed",
     count: props.completedTasks,
   },
 ]);
 
 // Methods
-const selectFilter = (filterValue) => {
+const selectFilter = (filterValue: FilterType) => {
   if (filterValue !== props.currentFilter) {
     emit("filter-change", filterValue);
   }

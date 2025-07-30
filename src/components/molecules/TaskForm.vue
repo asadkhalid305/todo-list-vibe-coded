@@ -63,27 +63,25 @@
   </form>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, nextTick, computed } from "vue";
 import BaseInput from "../atoms/BaseInput.vue";
 import BaseButton from "../atoms/BaseButton.vue";
 import { useTaskFormValidation } from "@/composables/useFormValidation";
 import { useFormKeyboard } from "@/composables/useKeyboardShortcuts";
+import type { TaskFormProps, TaskFormEmits } from "@/types/components";
 
-// Props definition
-const props = defineProps({
-  isSubmitting: {
-    type: Boolean,
-    default: false,
-  },
+// Props definition with TypeScript
+const props = withDefaults(defineProps<TaskFormProps>(), {
+  isSubmitting: false,
 });
 
-// Emits definition
-const emit = defineEmits(["add-task"]);
+// Emits definition with TypeScript
+const emit = defineEmits<TaskFormEmits>();
 
 // Reactive data
-const newTaskText = ref("");
-const inputRef = ref(null);
+const newTaskText = ref<string>("");
+const inputRef = ref<InstanceType<typeof BaseInput> | null>(null);
 
 // Use form validation composable
 const { getFieldError, clearFieldError, validateAndSubmit } =
@@ -93,10 +91,13 @@ const { getFieldError, clearFieldError, validateAndSubmit } =
 const error = computed(() => getFieldError("taskText"));
 
 // Methods
-const handleSubmit = async () => {
-  const result = await validateAndSubmit(newTaskText.value, async (text) => {
-    emit("add-task", text);
-  });
+const handleSubmit = async (): Promise<void> => {
+  const result = await validateAndSubmit(
+    newTaskText.value,
+    async (text: string) => {
+      emit("add-task", text);
+    }
+  );
 
   if (result.success) {
     newTaskText.value = "";
@@ -106,7 +107,7 @@ const handleSubmit = async () => {
   }
 };
 
-const handleKeydown = (event) => {
+const handleKeydown = (event: KeyboardEvent): void => {
   // Clear error when user starts typing
   if (getFieldError("taskText")) {
     clearFieldError("taskText");

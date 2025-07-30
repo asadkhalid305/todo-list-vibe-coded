@@ -14,6 +14,7 @@ export type * from "./animation";
 export type * from "./validation";
 export type * from "./keyboard";
 export type * from "./statistics";
+export type * from "./components";
 
 // Vue-specific types
 export interface ComponentEmits {

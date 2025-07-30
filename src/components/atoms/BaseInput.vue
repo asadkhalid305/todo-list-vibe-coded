@@ -19,55 +19,32 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed, ref } from "vue";
+import type { BaseInputProps, BaseInputEmits } from "@/types/components";
 
-// Props definition
-const props = defineProps({
-  modelValue: {
-    type: String,
-    default: "",
-  },
-  type: {
-    type: String,
-    default: "text",
-  },
-  placeholder: {
-    type: String,
-    default: "",
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-  error: {
-    type: String,
-    default: "",
-  },
-  size: {
-    type: String,
-    default: "medium",
-    validator: (value) => ["small", "medium", "large"].includes(value),
-  },
-  ariaLabel: {
-    type: String,
-    default: "",
-  },
-  id: {
-    type: String,
-    default: "",
-  },
+// Props definition with TypeScript
+const props = withDefaults(defineProps<BaseInputProps>(), {
+  modelValue: "",
+  type: "text",
+  placeholder: "",
+  disabled: false,
+  error: "",
+  size: "medium",
+  ariaLabel: "",
+  id: "",
 });
 
-// Emits definition
-const emit = defineEmits(["update:modelValue", "blur", "focus", "keydown"]);
+// Emits definition with TypeScript
+const emit = defineEmits<BaseInputEmits>();
 
 // Template ref
-const inputRef = ref(null);
+const inputRef = ref<HTMLInputElement | null>(null);
 
 // Input handler
-const handleInput = (event) => {
-  emit("update:modelValue", event.target.value);
+const handleInput = (event: Event) => {
+  const target = event.target as HTMLInputElement;
+  emit("update:modelValue", target.value);
 };
 
 // Computed classes using Tailwind utilities
@@ -93,7 +70,7 @@ const inputClasses = computed(() => {
   };
 
   // State classes
-  const stateClasses = [];
+  const stateClasses: string[] = [];
 
   if (props.error) {
     stateClasses.push("theme-input-error", "focus:ring-red-500");
@@ -105,7 +82,7 @@ const inputClasses = computed(() => {
     stateClasses.push("theme-input-disabled", "cursor-not-allowed");
   }
 
-  return [...baseClasses, ...sizeClasses[props.size], ...stateClasses];
+  return [...baseClasses, ...sizeClasses[props.size!], ...stateClasses];
 });
 
 // Expose methods

@@ -4,7 +4,7 @@
 -->
 <template>
   <div
-    class="flex items-center gap-4 p-4 border rounded-lg shadow-sm transition-all duration-250 min-h-[60px] task-item hover:shadow-md sm:p-5 sm:gap-5 sm:p-6 md:gap-5 md:p-6"
+    class="flex items-center gap-4 p-4 border rounded-lg shadow-sm transition-all duration-250 min-h-[60px] task-item hover:shadow-md sm:p-5 sm:gap-5 md:p-6 md:gap-5"
     :class="{ 'task-item--completed': task.completed }"
   >
     <BaseCheckbox
@@ -42,35 +42,23 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import BaseCheckbox from "../atoms/BaseCheckbox.vue";
 import BaseButton from "../atoms/BaseButton.vue";
+import type { TaskItemProps, TaskItemEmits } from "@/types/components";
 
-// Props definition
-const props = defineProps({
-  task: {
-    type: Object,
-    required: true,
-    validator: (task) => {
-      return (
-        task &&
-        typeof task.id !== "undefined" &&
-        typeof task.text === "string" &&
-        typeof task.completed === "boolean"
-      );
-    },
-  },
-});
+// Props definition with TypeScript
+const props = defineProps<TaskItemProps>();
 
-// Emits definition
-const emit = defineEmits(["toggle-complete", "delete"]);
+// Emits definition with TypeScript
+const emit = defineEmits<TaskItemEmits>();
 
 // Event handlers
-const toggleComplete = () => {
+const toggleComplete = (): void => {
   emit("toggle-complete", props.task.id);
 };
 
-const deleteTask = () => {
+const deleteTask = (): void => {
   emit("delete", props.task.id);
 };
 </script>

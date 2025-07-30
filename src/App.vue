@@ -23,7 +23,7 @@
   />
 </template>
 
-<script setup>
+<script setup lang="ts">
 import TodoLayout from "./components/templates/TodoLayout.vue";
 import { useAppState } from "./composables/useAppState";
 

@@ -81,39 +81,49 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
+import type { Task } from "@/types/task";
 import { useTaskStatistics } from "@/composables/useTaskStatistics";
 
 // Props definition
-const props = defineProps({
-  totalTasks: {
-    type: Number,
-    default: 0,
-  },
-  completedTasks: {
-    type: Number,
-    default: 0,
-  },
-  pendingTasks: {
-    type: Number,
-    default: 0,
-  },
+interface Props {
+  totalTasks?: number;
+  completedTasks?: number;
+  pendingTasks?: number;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  totalTasks: 0,
+  completedTasks: 0,
+  pendingTasks: 0,
 });
 
 // Create a reactive tasks array from props for the composable
-const tasksFromProps = computed(() => {
+const tasksFromProps = computed((): Task[] => {
   // Create mock tasks array based on props for statistics calculation
-  const tasks = [];
+  const tasks: Task[] = [];
 
   // Add completed tasks
   for (let i = 0; i < props.completedTasks; i++) {
-    tasks.push({ id: i, completed: true });
+    tasks.push({
+      id: i,
+      text: `completed-task-${i}`,
+      completed: true,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
   }
 
   // Add pending tasks
   for (let i = props.completedTasks; i < props.totalTasks; i++) {
-    tasks.push({ id: i, completed: false });
+    tasks.push({
+      id: i,
+      text: `pending-task-${i}`,
+      completed: false,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
   }
 
   return tasks;

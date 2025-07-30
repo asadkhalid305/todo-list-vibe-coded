@@ -13,35 +13,21 @@
   </button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 import { useThemeClasses } from "@/composables/useThemeClasses";
+import type { BaseButtonProps, BaseButtonEmits } from "@/types/components";
 
-// Props definition
-const props = defineProps({
-  variant: {
-    type: String,
-    default: "primary",
-    validator: (value) =>
-      ["primary", "secondary", "danger", "success"].includes(value),
-  },
-  size: {
-    type: String,
-    default: "medium",
-    validator: (value) => ["small", "medium", "large"].includes(value),
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-  type: {
-    type: String,
-    default: "button",
-  },
+// Props definition with TypeScript
+const props = withDefaults(defineProps<BaseButtonProps>(), {
+  variant: "primary",
+  size: "medium",
+  disabled: false,
+  type: "button",
 });
 
-// Emits definition
-defineEmits(["click"]);
+// Emits definition with TypeScript
+defineEmits<BaseButtonEmits>();
 
 // Use theme classes composable
 const { getButtonClasses } = useThemeClasses();

@@ -67,29 +67,30 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
+import type { Task } from "@/types/task";
+import type { FilterType } from "@/types/filter";
 import TaskItem from "../molecules/TaskItem.vue";
 
 // Props definition
-const props = defineProps({
-  tasks: {
-    type: Array,
-    required: true,
-    default: () => [],
-  },
-  currentFilter: {
-    type: String,
-    required: true,
-    validator: (value) => ["all", "pending", "completed"].includes(value),
-  },
-});
+interface Props {
+  tasks: Task[];
+  currentFilter: FilterType;
+}
+
+const props = defineProps<Props>();
 
 // Emits definition
-defineEmits(["toggle-complete", "delete"]);
+interface Emits {
+  (e: "toggle-complete", taskId: number): void;
+  (e: "delete", taskId: number): void;
+}
+
+defineEmits<Emits>();
 
 // Computed properties
-const filteredTasks = computed(() => {
+const filteredTasks = computed((): Task[] => {
   switch (props.currentFilter) {
     case "pending":
       return props.tasks.filter((task) => !task.completed);
@@ -100,7 +101,7 @@ const filteredTasks = computed(() => {
   }
 });
 
-const emptyStateTitle = computed(() => {
+const emptyStateTitle = computed((): string => {
   switch (props.currentFilter) {
     case "pending":
       return "No pending tasks";
@@ -111,7 +112,7 @@ const emptyStateTitle = computed(() => {
   }
 });
 
-const emptyStateDescription = computed(() => {
+const emptyStateDescription = computed((): string => {
   switch (props.currentFilter) {
     case "pending":
       return "All tasks are completed! Great job! 🎉";

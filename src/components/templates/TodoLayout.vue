@@ -105,7 +105,9 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import type { Task } from "@/types/task";
+import type { FilterType } from "@/types/filter";
 import TaskForm from "../molecules/TaskForm.vue";
 import FilterTabs from "../molecules/FilterTabs.vue";
 import TaskList from "../organisms/TaskList.vue";
@@ -113,69 +115,50 @@ import TaskSummary from "../organisms/TaskSummary.vue";
 import DarkModeToggle from "../atoms/DarkModeToggle.vue";
 
 // Props definition
-const props = defineProps({
-  tasks: {
-    type: Array,
-    required: true,
-    default: () => [],
-  },
-  totalTasks: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
-  completedTasks: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
-  pendingTasks: {
-    type: Number,
-    required: true,
-    default: 0,
-  },
-  currentFilter: {
-    type: String,
-    required: true,
-    validator: (value) => ["all", "pending", "completed"].includes(value),
-  },
-  isSubmitting: {
-    type: Boolean,
-    default: false,
-  },
-  isDarkMode: {
-    type: Boolean,
-    default: false,
-  },
+interface Props {
+  tasks: Task[];
+  totalTasks: number;
+  completedTasks: number;
+  pendingTasks: number;
+  currentFilter: FilterType;
+  isSubmitting?: boolean;
+  isDarkMode?: boolean;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  isSubmitting: false,
+  isDarkMode: false,
 });
 
 // Emits definition
-const emit = defineEmits([
-  "add-task",
-  "toggle-task",
-  "delete-task",
-  "set-filter",
-  "toggle-theme",
-]);
+interface Emits {
+  (e: "add-task", taskText: string): void;
+  (e: "toggle-task", taskId: number): void;
+  (e: "delete-task", taskId: number): void;
+  (e: "set-filter", filter: FilterType): void;
+  (e: "toggle-theme", isDark: boolean): void;
+}
+
+const emit = defineEmits<Emits>();
 
 // Event handlers
-const handleAddTask = (taskText) => {
+const handleAddTask = (taskText: string): void => {
   emit("add-task", taskText);
 };
 
-const handleToggleComplete = (taskId) => {
+const handleToggleComplete = (taskId: number): void => {
   emit("toggle-task", taskId);
 };
 
-const handleDeleteTask = (taskId) => {
+const handleDeleteTask = (taskId: number): void => {
   emit("delete-task", taskId);
 };
 
-const handleFilterChange = (filter) => {
+const handleFilterChange = (filter: FilterType): void => {
   emit("set-filter", filter);
 };
 
-const handleThemeToggle = (isDark) => {
+const handleThemeToggle = (isDark: boolean): void => {
   emit("toggle-theme", isDark);
 };
 </script>

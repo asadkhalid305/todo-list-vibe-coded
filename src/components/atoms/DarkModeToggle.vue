@@ -45,20 +45,21 @@
   </button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 import { useThemeClasses } from "@/composables/useThemeClasses";
+import type {
+  DarkModeToggleProps,
+  DarkModeToggleEmits,
+} from "@/types/components";
 
-// Props definition
-const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    default: false,
-  },
+// Props definition with TypeScript
+const props = withDefaults(defineProps<DarkModeToggleProps>(), {
+  modelValue: false,
 });
 
-// Emits definition
-const emit = defineEmits(["update:modelValue"]);
+// Emits definition with TypeScript
+const emit = defineEmits<DarkModeToggleEmits>();
 
 // Computed properties
 const isDark = computed(() => props.modelValue);

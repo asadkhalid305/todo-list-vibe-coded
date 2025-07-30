@@ -32,28 +32,20 @@
   </label>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 import { useThemeClasses } from "@/composables/useThemeClasses";
+import type { BaseCheckboxProps, BaseCheckboxEmits } from "@/types/components";
 
-// Props definition
-const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    default: false,
-  },
-  disabled: {
-    type: Boolean,
-    default: false,
-  },
-  ariaLabel: {
-    type: String,
-    default: "",
-  },
+// Props definition with TypeScript
+const props = withDefaults(defineProps<BaseCheckboxProps>(), {
+  modelValue: false,
+  disabled: false,
+  ariaLabel: "",
 });
 
-// Emits definition
-const emit = defineEmits(["update:modelValue"]);
+// Emits definition with TypeScript
+const emit = defineEmits<BaseCheckboxEmits>();
 
 // Theme classes
 const { getCheckboxClasses, getCheckboxContainerClasses } = useThemeClasses();
@@ -68,9 +60,10 @@ const checkboxContainerClasses = computed(() =>
 );
 
 // Change handler
-const handleChange = (event) => {
+const handleChange = (event: Event) => {
   if (!props.disabled) {
-    emit("update:modelValue", event.target.checked);
+    const target = event.target as HTMLInputElement;
+    emit("update:modelValue", target.checked);
   }
 };
 </script>
