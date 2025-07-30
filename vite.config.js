@@ -20,7 +20,7 @@ export default defineConfig({
   // Development server configuration
   server: {
     port: 3000, // Default port (will auto-increment if busy)
-    open: true, // Auto-open browser
+    open: false, // Auto-open browser
     host: "localhost", // Host configuration
   },
 
