@@ -1,10 +1,10 @@
 <!-- 
   MOLECULE: Task Form Component
-  Form for adding new tasks with input and submit button
+  Form for adding new tasks with input and submit button using Tailwind utilities
 -->
 <template>
-  <form class="task-form" @submit.prevent="handleSubmit">
-    <div class="task-form__input-group">
+  <form class="w-full" @submit.prevent="handleSubmit">
+    <div class="flex gap-3 items-start sm:gap-4">
       <BaseInput
         ref="inputRef"
         v-model="newTaskText"
@@ -13,6 +13,7 @@
         size="large"
         :aria-label="'New task input'"
         :error="error"
+        class="flex-1"
         @keydown="handleKeydown"
       />
       <BaseButton
@@ -24,7 +25,7 @@
       >
         <svg
           v-if="!isSubmitting"
-          class="task-form__add-icon"
+          class="w-5 h-5 sm:w-4 sm:h-4"
           viewBox="0 0 20 20"
           fill="currentColor"
         >
@@ -34,8 +35,8 @@
             clip-rule="evenodd"
           />
         </svg>
-        <span v-else class="task-form__spinner">
-          <svg class="task-form__spinner-icon" viewBox="0 0 24 24">
+        <span v-else class="inline-flex items-center justify-center">
+          <svg class="w-5 h-5 sm:w-4 sm:h-4 animate-spin" viewBox="0 0 24 24">
             <circle
               cx="12"
               cy="12"
@@ -51,12 +52,16 @@
             />
           </svg>
         </span>
-        <span class="task-form__button-text">
+        <span class="ml-2 hidden sm:inline">
           {{ isSubmitting ? "Adding..." : "Add" }}
         </span>
       </BaseButton>
     </div>
-    <div v-if="error" class="task-form__error" role="alert">
+    <div
+      v-if="error"
+      class="mt-2 p-2 px-3 rounded-md border text-sm theme-error"
+      role="alert"
+    >
       {{ error }}
     </div>
   </form>
@@ -132,92 +137,9 @@ defineExpose({
 </script>
 
 <style scoped>
-.task-form {
-  width: 100%;
-}
-
-.task-form__input-group {
-  display: flex;
-  gap: var(--space-3);
-  align-items: flex-start;
-}
-
-.task-form__input-group > :first-child {
-  flex: 1;
-}
-
-.task-form__add-icon {
-  width: 1.25rem;
-  height: 1.25rem;
-}
-
-.task-form__spinner {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.task-form__spinner-icon {
-  width: 1.25rem;
-  height: 1.25rem;
-  animation: spin 1s linear infinite;
-}
-
-.task-form__button-text {
-  margin-left: var(--space-2);
-}
-
-.task-form__error {
-  margin-top: var(--space-2);
-  padding: var(--space-2) var(--space-3);
-  background-color: #fef2f2;
-  border: 1px solid #fecaca;
-  border-radius: var(--radius-md);
-  color: var(--danger-color);
-  font-size: var(--font-size-sm);
-}
-
-/* Animations */
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Mobile optimizations */
-@media (max-width: 639px) {
-  .task-form__input-group {
-    gap: var(--space-2);
-  }
-
-  .task-form__add-icon {
-    width: 1rem;
-    height: 1rem;
-  }
-
-  .task-form__spinner-icon {
-    width: 1rem;
-    height: 1rem;
-  }
-
-  .task-form__button-text {
-    display: none; /* Hide text on mobile, show only icon */
-  }
-}
-
-/* Tablet and desktop */
-@media (min-width: 640px) {
-  .task-form__input-group {
-    gap: var(--space-4);
-  }
-}
-
 /* Accessibility improvements */
 @media (prefers-reduced-motion: reduce) {
-  .task-form__spinner-icon {
+  .animate-spin {
     animation: none;
   }
 }

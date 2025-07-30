@@ -1,17 +1,23 @@
 <!-- 
   TEMPLATE: Todo App Layout
-  Main layout template that combines all organisms
+  Main layout template that combines all organisms using Tailwind utilities
 -->
 <template>
-  <div class="todo-layout">
-    <div class="container">
+  <div class="min-h-screen flex flex-col theme-bg-primary">
+    <!-- Container with responsive margins and padding using pure Tailwind -->
+    <div class="container mx-auto min-h-screen flex flex-col max-w-4xl">
       <!-- Header -->
-      <header class="todo-layout__header">
-        <div class="todo-layout__header-content">
-          <div class="todo-layout__title-section">
-            <h1 class="todo-layout__title">
-              <span class="todo-layout__title-icon">
+      <header class="py-8 pt-6 sm:py-6 sm:pt-4 lg:py-12 lg:pt-10">
+        <div class="flex items-center justify-between gap-4">
+          <div class="text-center flex-1">
+            <h1
+              class="text-3xl sm:text-2xl lg:text-5xl font-semibold theme-text-primary mb-2 flex items-center justify-center gap-3 sm:gap-2"
+            >
+              <span
+                class="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 bg-gradient-to-br from-purple-400 to-purple-500 text-purple-50 rounded-2xl text-lg sm:text-xl lg:text-2xl font-bold shadow-md transition-all duration-300 dark:from-purple-800 dark:to-purple-700 dark:text-purple-100"
+              >
                 <svg
+                  class="w-full h-full p-1"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
@@ -22,13 +28,15 @@
               </span>
               To-Do List
             </h1>
-            <p class="todo-layout__subtitle">
+            <p
+              class="text-lg sm:text-base lg:text-xl theme-text-secondary font-normal"
+            >
               Stay organized and get things done
             </p>
           </div>
 
           <!-- Dark Mode Toggle -->
-          <div class="todo-layout__theme-toggle">
+          <div class="flex items-center">
             <DarkModeToggle
               :model-value="isDarkMode"
               @update:model-value="handleThemeToggle"
@@ -38,16 +46,18 @@
       </header>
 
       <!-- Main content -->
-      <main class="todo-layout__main">
+      <main
+        class="flex-1 flex flex-col gap-6 sm:gap-4 md:gap-8 lg:gap-10 pb-8 sm:pb-6 lg:pb-12"
+      >
         <!-- Add task form -->
-        <section class="todo-layout__section" aria-label="Add new task">
+        <section class="w-full" aria-label="Add new task">
           <TaskForm :is-submitting="isSubmitting" @add-task="handleAddTask" />
         </section>
 
         <!-- Filter tabs -->
         <section
           v-if="tasks.length > 0"
-          class="todo-layout__section"
+          class="w-full"
           aria-label="Filter tasks"
         >
           <FilterTabs
@@ -60,7 +70,7 @@
         </section>
 
         <!-- Task list -->
-        <section class="todo-layout__section" aria-label="Task list">
+        <section class="w-full" aria-label="Task list">
           <TaskList
             :tasks="tasks"
             :current-filter="currentFilter"
@@ -72,7 +82,7 @@
         <!-- Task summary -->
         <section
           v-if="tasks.length > 0"
-          class="todo-layout__section"
+          class="w-full"
           aria-label="Task summary"
         >
           <TaskSummary
@@ -84,8 +94,10 @@
       </main>
 
       <!-- Footer -->
-      <footer class="todo-layout__footer">
-        <p class="todo-layout__footer-text">Built with Vue 3 & ❤️</p>
+      <footer
+        class="mt-auto py-6 sm:py-4 text-center border-t border-gray-200 dark:border-gray-700 theme-bg-secondary"
+      >
+        <p class="text-sm theme-text-secondary">Built with Vue 3 & ❤️</p>
       </footer>
     </div>
   </div>
@@ -162,205 +174,22 @@ const handleThemeToggle = (isDark) => {
 </script>
 
 <style scoped>
-.todo-layout {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background: linear-gradient(
-    135deg,
-    var(--bg-primary) 0%,
-    var(--bg-tertiary) 100%
-  );
-}
-
-.todo-layout .container {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.todo-layout__header {
-  padding: var(--space-8) 0 var(--space-6) 0;
-}
-
-.todo-layout__header-content {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-4);
-}
-
-.todo-layout__title-section {
-  text-align: center;
-  flex: 1;
-}
-
-.todo-layout__theme-toggle {
-  display: flex;
-  align-items: center;
-}
-
-.todo-layout__title {
-  font-size: var(--font-size-3xl);
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: var(--space-2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-3);
-}
-
-.todo-layout__title-icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.5rem;
-  height: 2.5rem;
-  background: linear-gradient(135deg, var(--purple-400), var(--purple-500));
-  color: var(--purple-50);
-  border-radius: var(--radius-xl);
-  font-size: var(--font-size-xl);
-  font-weight: bold;
-  box-shadow: var(--shadow-md);
-  transition: all var(--transition-normal);
-}
-
-.todo-layout__subtitle {
-  font-size: var(--font-size-lg);
-  color: var(--text-secondary);
-  font-weight: 400;
-}
-
-.todo-layout__main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-6);
-  padding-bottom: var(--space-8);
-}
-
-.todo-layout__section {
-  width: 100%;
-}
-
-.todo-layout__footer {
-  margin-top: auto;
-  padding: var(--space-6) 0;
-  text-align: center;
-  border-top: 1px solid var(--border-primary);
-  background-color: var(--bg-secondary);
-}
-
-.todo-layout__footer-text {
-  font-size: var(--font-size-sm);
-  color: var(--text-secondary);
-}
-
-/* Mobile optimizations */
-@media (max-width: 639px) {
-  .todo-layout__header {
-    padding: var(--space-6) 0 var(--space-4) 0;
-  }
-
-  .todo-layout__header-content {
-    flex-direction: column;
-    gap: var(--space-4);
-  }
-
-  .todo-layout__title-section {
-    order: 1;
-  }
-
-  .todo-layout__theme-toggle {
-    order: 0;
-    align-self: flex-end;
-  }
-
-  .todo-layout__title {
-    font-size: var(--font-size-2xl);
-    gap: var(--space-2);
-  }
-
-  .todo-layout__title-icon {
-    width: 2rem;
-    height: 2rem;
-    font-size: var(--font-size-lg);
-  }
-
-  .todo-layout__subtitle {
-    font-size: var(--font-size-base);
-  }
-
-  .todo-layout__main {
-    gap: var(--space-4);
-    padding-bottom: var(--space-6);
-  }
-
-  .todo-layout__footer {
-    padding: var(--space-4) 0;
-  }
-}
-
-/* Tablet optimizations */
-@media (min-width: 640px) and (max-width: 1023px) {
-  .todo-layout__header {
-    padding: var(--space-10) 0 var(--space-8) 0;
-  }
-
-  .todo-layout__main {
-    gap: var(--space-8);
-  }
-}
-
-/* Desktop optimizations */
-@media (min-width: 1024px) {
-  .todo-layout__header {
-    padding: var(--space-12) 0 var(--space-10) 0;
-  }
-
-  .todo-layout__title {
-    font-size: 3rem;
-  }
-
-  .todo-layout__title-icon {
-    width: 3rem;
-    height: 3rem;
-    font-size: var(--font-size-2xl);
-  }
-
-  .todo-layout__subtitle {
-    font-size: var(--font-size-xl);
-  }
-
-  .todo-layout__main {
-    gap: var(--space-10);
-    padding-bottom: var(--space-12);
-  }
-}
-
-/* Dark mode specific styles */
-[data-theme="dark"] .todo-layout__title-icon {
-  background: linear-gradient(135deg, var(--purple-800), var(--purple-700));
-  color: var(--purple-100);
-}
-
 /* High contrast mode */
 @media (prefers-contrast: high) {
-  .todo-layout__title-icon {
+  .bg-gradient-to-br {
     background: var(--slate-900);
   }
 
-  .todo-layout__footer {
+  .border-t {
     border-top-color: var(--slate-400);
   }
 }
 
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .todo-layout {
-    background: var(--bg-primary);
+  .duration-300,
+  .transition-all {
+    transition: none;
   }
 }
 </style>

@@ -1,24 +1,21 @@
 <!-- 
   ATOM: Checkbox Component
-  Custom styled checkbox with animations
+  Custom styled checkbox with animations using Tailwind utilities
 -->
 <template>
-  <label class="checkbox" :class="{ 'checkbox--disabled': disabled }">
+  <label :class="checkboxContainerClasses">
     <input
       type="checkbox"
-      class="checkbox__input"
+      class="absolute opacity-0 w-0 h-0"
       :checked="modelValue"
       :disabled="disabled"
       :aria-label="ariaLabel"
       @change="handleChange"
     />
-    <span
-      class="checkbox__checkmark"
-      :class="{ 'checkbox__checkmark--checked': modelValue }"
-    >
+    <span :class="checkboxClasses">
       <svg
         v-if="modelValue"
-        class="checkbox__icon"
+        class="w-3 h-3 sm:w-3.5 sm:h-3.5 theme-checkbox-icon animate-[checkmark-appear_0.2s_ease-in-out]"
         viewBox="0 0 20 20"
         fill="currentColor"
       >
@@ -29,13 +26,16 @@
         />
       </svg>
     </span>
-    <span v-if="$slots.default" class="checkbox__label">
+    <span v-if="$slots.default" class="text-base theme-text-primary leading-6">
       <slot />
     </span>
   </label>
 </template>
 
 <script setup>
+import { computed } from "vue";
+import { useThemeClasses } from "@/composables/useThemeClasses";
+
 // Props definition
 const props = defineProps({
   modelValue: {
@@ -55,6 +55,18 @@ const props = defineProps({
 // Emits definition
 const emit = defineEmits(["update:modelValue"]);
 
+// Theme classes
+const { getCheckboxClasses, getCheckboxContainerClasses } = useThemeClasses();
+
+// Computed classes
+const checkboxClasses = computed(() =>
+  getCheckboxClasses(props.modelValue, props.disabled)
+);
+
+const checkboxContainerClasses = computed(() =>
+  getCheckboxContainerClasses(props.disabled)
+);
+
 // Change handler
 const handleChange = (event) => {
   if (!props.disabled) {
@@ -64,70 +76,7 @@ const handleChange = (event) => {
 </script>
 
 <style scoped>
-.checkbox {
-  display: inline-flex;
-  align-items: center;
-  cursor: pointer;
-  user-select: none;
-  gap: var(--space-3);
-}
-
-.checkbox--disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
-}
-
-.checkbox__input {
-  position: absolute;
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-
-.checkbox__checkmark {
-  position: relative;
-  width: 1.25rem;
-  height: 1.25rem;
-  border: 2px solid var(--border-secondary);
-  border-radius: var(--radius-sm);
-  background-color: var(--bg-secondary);
-  transition: all var(--transition-fast);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-
-.checkbox__checkmark--checked {
-  background-color: var(--purple-600);
-  border-color: var(--purple-600);
-}
-
-.checkbox__icon {
-  width: 0.875rem;
-  height: 0.875rem;
-  color: var(--purple-50);
-  animation: checkmark-appear var(--transition-fast) ease-in-out;
-}
-
-.checkbox__label {
-  font-size: var(--font-size-base);
-  color: var(--text-primary);
-  line-height: 1.5;
-}
-
-/* Hover states */
-.checkbox:hover:not(.checkbox--disabled) .checkbox__checkmark {
-  border-color: var(--purple-500);
-  box-shadow: 0 0 0 3px var(--purple-100);
-}
-
-/* Focus states */
-.checkbox__input:focus + .checkbox__checkmark {
-  box-shadow: 0 0 0 3px var(--purple-200);
-}
-
-/* Animations */
+/* Keyframe animation for checkmark */
 @keyframes checkmark-appear {
   0% {
     transform: scale(0.5);
@@ -136,23 +85,6 @@ const handleChange = (event) => {
   100% {
     transform: scale(1);
     opacity: 1;
-  }
-}
-
-/* Mobile optimizations */
-@media (max-width: 639px) {
-  .checkbox__checkmark {
-    width: 1.5rem;
-    height: 1.5rem;
-  }
-
-  .checkbox__icon {
-    width: 1rem;
-    height: 1rem;
-  }
-
-  .checkbox {
-    gap: var(--space-4);
   }
 }
 </style>

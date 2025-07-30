@@ -1,21 +1,37 @@
 <!-- 
   MOLECULE: Filter Tabs Component
-  Navigation tabs for filtering tasks (All, Pending, Completed)
+  Navigation tabs for filtering tasks (All, Pending, Completed) using Tailwind utilities
 -->
 <template>
-  <div class="filter-tabs" role="tablist" aria-label="Task filters">
+  <div
+    class="flex theme-filter-tabs rounded-lg p-1 gap-1"
+    role="tablist"
+    aria-label="Task filters"
+  >
     <button
       v-for="filter in filters"
       :key="filter.value"
-      class="filter-tabs__tab"
-      :class="{ 'filter-tabs__tab--active': currentFilter === filter.value }"
+      :class="[
+        'flex-1 flex items-center justify-center gap-2 px-4 py-3 sm:px-6 md:px-6 md:py-3 rounded-md border-none font-medium text-sm md:text-base cursor-pointer transition-all duration-200 select-none min-h-10 sm:min-h-9 focus:outline-none focus:outline-2 focus:outline-offset-2 focus:outline-purple-600',
+        currentFilter === filter.value
+          ? 'theme-filter-tab-active shadow-sm active'
+          : 'theme-filter-tab hover:theme-filter-tab:hover',
+      ]"
       role="tab"
       :aria-selected="currentFilter === filter.value"
       :aria-controls="`task-list-${filter.value}`"
       @click="selectFilter(filter.value)"
     >
-      <span class="filter-tabs__label">{{ filter.label }}</span>
-      <span v-if="filter.count !== undefined" class="filter-tabs__count">
+      <span class="font-medium">{{ filter.label }}</span>
+      <span
+        v-if="filter.count !== undefined"
+        :class="[
+          'inline-flex items-center justify-center min-w-5 h-5 px-1 text-xs font-semibold rounded-lg transition-all duration-200 sm:min-w-4 sm:h-4 sm:text-xs',
+          currentFilter === filter.value
+            ? 'theme-filter-count-active'
+            : 'theme-filter-count',
+        ]"
+      >
         {{ filter.count }}
       </span>
     </button>
@@ -77,105 +93,10 @@ const selectFilter = (filterValue) => {
 </script>
 
 <style scoped>
-.filter-tabs {
-  display: flex;
-  background-color: var(--bg-tertiary);
-  border-radius: var(--radius-lg);
-  padding: var(--space-1);
-  gap: var(--space-1);
-}
-
-.filter-tabs__tab {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--space-2);
-  padding: var(--space-3) var(--space-4);
-  border-radius: var(--radius-md);
-  background-color: transparent;
-  color: var(--text-secondary);
-  font-weight: 500;
-  font-size: var(--font-size-sm);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-  border: none;
-  user-select: none;
-  min-height: 40px;
-}
-
-.filter-tabs__tab:hover:not(.filter-tabs__tab--active) {
-  background-color: var(--bg-secondary);
-  color: var(--text-primary);
-}
-
-.filter-tabs__tab--active {
-  background-color: var(--bg-secondary);
-  color: var(--purple-600);
-  box-shadow: var(--shadow-sm);
-}
-
-.filter-tabs__label {
-  font-weight: 500;
-}
-
-.filter-tabs__count {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 1.25rem;
-  height: 1.25rem;
-  padding: 0 var(--space-1);
-  background-color: var(--slate-200);
-  color: var(--slate-600);
-  font-size: var(--font-size-xs);
-  font-weight: 600;
-  border-radius: var(--radius-lg);
-  transition: all var(--transition-fast);
-}
-
-.filter-tabs__tab--active .filter-tabs__count {
-  background-color: var(--purple-600);
-  color: var(--purple-50);
-}
-
-/* Mobile optimizations */
-@media (max-width: 639px) {
-  .filter-tabs {
-    padding: 2px;
-  }
-
-  .filter-tabs__tab {
-    padding: var(--space-2) var(--space-3);
-    font-size: var(--font-size-xs);
-    min-height: 36px;
-  }
-
-  .filter-tabs__count {
-    min-width: 1rem;
-    height: 1rem;
-    font-size: 0.6rem;
-  }
-}
-
-/* Tablet and desktop */
-@media (min-width: 768px) {
-  .filter-tabs__tab {
-    padding: var(--space-3) var(--space-6);
-    font-size: var(--font-size-base);
-  }
-}
-
-/* Focus styles for accessibility */
-.filter-tabs__tab:focus {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
-}
-
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
-  .filter-tabs__tab,
-  .filter-tabs__count {
+  .duration-200,
+  .transition-all {
     transition: none;
   }
 }

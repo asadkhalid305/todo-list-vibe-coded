@@ -1,13 +1,23 @@
 <!-- 
   ORGANISM: Task List Component
-  Container for displaying filtered list of tasks with animations
+  Container for displaying filtered list of tasks with animations using Tailwind utilities
 -->
 <template>
-  <div class="task-list">
+  <div class="w-full">
     <!-- Empty state -->
-    <div v-if="filteredTasks.length === 0" class="task-list__empty">
-      <div class="task-list__empty-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+    <div
+      v-if="filteredTasks.length === 0"
+      class="flex flex-col items-center justify-center text-center px-6 py-12 sm:px-4 sm:py-8 md:px-8 md:py-16 text-gray-500"
+    >
+      <div
+        class="w-16 h-16 sm:w-12 sm:h-12 md:w-20 md:h-20 mb-6 sm:mb-4 md:mb-8 text-gray-400"
+      >
+        <svg
+          class="w-full h-full"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+        >
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -16,8 +26,16 @@
           />
         </svg>
       </div>
-      <h3 class="task-list__empty-title">{{ emptyStateTitle }}</h3>
-      <p class="task-list__empty-description">{{ emptyStateDescription }}</p>
+      <h3
+        class="text-xl sm:text-lg md:text-2xl font-semibold text-gray-600 mb-2"
+      >
+        {{ emptyStateTitle }}
+      </h3>
+      <p
+        class="text-base sm:text-sm md:text-lg text-gray-500 max-w-xs md:max-w-sm leading-relaxed"
+      >
+        {{ emptyStateDescription }}
+      </p>
     </div>
 
     <!-- Task items with animations -->
@@ -25,11 +43,11 @@
       v-else
       name="task-list"
       tag="ul"
-      class="task-list__items"
+      class="flex flex-col gap-3 sm:gap-2 md:gap-4 list-none p-0 m-0"
       :id="`task-list-${currentFilter}`"
       :aria-label="`${filteredTasks.length} ${currentFilter} tasks`"
     >
-      <li v-for="task in filteredTasks" :key="task.id" class="task-list__item">
+      <li v-for="task in filteredTasks" :key="task.id" class="list-none">
         <TaskItem
           :task="task"
           @toggle-complete="$emit('toggle-complete', $event)"
@@ -97,67 +115,13 @@ const emptyStateDescription = computed(() => {
 </script>
 
 <style scoped>
-.task-list {
-  width: 100%;
-}
-
-.task-list__items {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.task-list__item {
-  list-style: none;
-}
-
-/* Empty state styles */
-.task-list__empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: var(--space-12) var(--space-6);
-  color: var(--gray-500);
-}
-
-.task-list__empty-icon {
-  width: 4rem;
-  height: 4rem;
-  margin-bottom: var(--space-6);
-  color: var(--gray-400);
-}
-
-.task-list__empty-icon svg {
-  width: 100%;
-  height: 100%;
-}
-
-.task-list__empty-title {
-  font-size: var(--font-size-xl);
-  font-weight: 600;
-  color: var(--gray-600);
-  margin-bottom: var(--space-2);
-}
-
-.task-list__empty-description {
-  font-size: var(--font-size-base);
-  color: var(--gray-500);
-  max-width: 300px;
-  line-height: 1.6;
-}
-
 /* Animation styles */
 .task-list-enter-active {
-  transition: all var(--transition-normal);
+  transition: all 0.3s ease;
 }
 
 .task-list-leave-active {
-  transition: all var(--transition-fast);
+  transition: all 0.2s ease;
 }
 
 .task-list-enter-from {
@@ -171,58 +135,7 @@ const emptyStateDescription = computed(() => {
 }
 
 .task-list-move {
-  transition: transform var(--transition-normal);
-}
-
-/* Mobile optimizations */
-@media (max-width: 639px) {
-  .task-list__items {
-    gap: var(--space-2);
-  }
-
-  .task-list__empty {
-    padding: var(--space-8) var(--space-4);
-  }
-
-  .task-list__empty-icon {
-    width: 3rem;
-    height: 3rem;
-    margin-bottom: var(--space-4);
-  }
-
-  .task-list__empty-title {
-    font-size: var(--font-size-lg);
-  }
-
-  .task-list__empty-description {
-    font-size: var(--font-size-sm);
-  }
-}
-
-/* Tablet and desktop */
-@media (min-width: 768px) {
-  .task-list__items {
-    gap: var(--space-4);
-  }
-
-  .task-list__empty {
-    padding: var(--space-16) var(--space-8);
-  }
-
-  .task-list__empty-icon {
-    width: 5rem;
-    height: 5rem;
-    margin-bottom: var(--space-8);
-  }
-
-  .task-list__empty-title {
-    font-size: var(--font-size-2xl);
-  }
-
-  .task-list__empty-description {
-    font-size: var(--font-size-lg);
-    max-width: 400px;
-  }
+  transition: transform 0.3s ease;
 }
 
 /* Accessibility improvements */

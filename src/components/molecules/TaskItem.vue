@@ -3,7 +3,10 @@
   Individual task item with checkbox, text, and delete button
 -->
 <template>
-  <div class="task-item" :class="{ 'task-item--completed': task.completed }">
+  <div
+    class="flex items-center gap-4 p-4 border rounded-lg shadow-sm transition-all duration-250 min-h-[60px] task-item hover:shadow-md sm:p-5 sm:gap-5 sm:p-6 md:gap-5 md:p-6"
+    :class="{ 'task-item--completed': task.completed }"
+  >
     <BaseCheckbox
       :model-value="task.completed"
       :aria-label="`Mark task '${task.text}' as ${
@@ -13,7 +16,7 @@
     />
 
     <span
-      class="task-item__text"
+      class="flex-1 text-base leading-relaxed break-words transition-all duration-150 task-item__text sm:text-sm md:text-lg"
       :class="{ 'task-item__text--completed': task.completed }"
     >
       {{ task.text }}
@@ -26,7 +29,7 @@
       @click="deleteTask"
     >
       <svg
-        class="task-item__delete-icon"
+        class="w-4 h-4 sm:w-3.5 sm:h-3.5"
         viewBox="0 0 20 20"
         fill="currentColor"
       >
@@ -74,21 +77,13 @@ const deleteTask = () => {
 </script>
 
 <style scoped>
+/* Task item theme styles */
 .task-item {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
-  padding: var(--space-4);
   background-color: var(--bg-secondary);
-  border: 1px solid var(--border-primary);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
-  transition: all var(--transition-normal);
-  min-height: 60px;
+  border-color: var(--border-primary);
 }
 
 .task-item:hover {
-  box-shadow: var(--shadow-md);
   border-color: var(--border-secondary);
 }
 
@@ -98,12 +93,7 @@ const deleteTask = () => {
 }
 
 .task-item__text {
-  flex: 1;
-  font-size: var(--font-size-base);
   color: var(--text-primary);
-  line-height: 1.5;
-  word-break: break-word;
-  transition: all var(--transition-fast);
 }
 
 .task-item__text--completed {
@@ -112,44 +102,9 @@ const deleteTask = () => {
   text-decoration-color: var(--text-secondary);
 }
 
-.task-item__delete-icon {
-  width: 1rem;
-  height: 1rem;
-}
-
-/* Mobile optimizations */
-@media (max-width: 639px) {
-  .task-item {
-    padding: var(--space-4) var(--space-3);
-    gap: var(--space-3);
-    min-height: 56px;
-  }
-
-  .task-item__text {
-    font-size: var(--font-size-sm);
-  }
-
-  .task-item__delete-icon {
-    width: 0.875rem;
-    height: 0.875rem;
-  }
-}
-
-/* Tablet and desktop */
-@media (min-width: 768px) {
-  .task-item {
-    padding: var(--space-5) var(--space-6);
-    gap: var(--space-5);
-  }
-
-  .task-item__text {
-    font-size: var(--font-size-lg);
-  }
-}
-
 /* Animation for task completion */
 .task-item--completed .task-item__text {
-  animation: task-complete var(--transition-normal) ease-in-out;
+  animation: task-complete 250ms ease-in-out;
 }
 
 @keyframes task-complete {

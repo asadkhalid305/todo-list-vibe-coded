@@ -1,0 +1,298 @@
+/* Theme utility classes for Tailwind integration */
+
+/* Card/Container themes */
+.theme-card {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-primary);
+}
+
+.theme-card:hover {
+  border-color: var(--border-secondary);
+}
+
+/* Text themes */
+.theme-text-primary {
+  color: var(--text-primary);
+}
+
+.theme-text-secondary {
+  color: var(--text-secondary);
+}
+
+.theme-text-muted {
+  color: var(--text-muted);
+}
+
+/* Background themes */
+.theme-bg-primary {
+  background-color: var(--bg-primary);
+}
+
+.theme-bg-secondary {
+  background-color: var(--bg-secondary);
+}
+
+.theme-bg-tertiary {
+  background-color: var(--bg-tertiary);
+}
+
+/* Button themes */
+.theme-btn-primary {
+  background-color: var(--purple-700);
+  color: var(--purple-50);
+  border-color: var(--purple-700);
+}
+
+.theme-btn-primary:hover:not(:disabled) {
+  background-color: var(--purple-800);
+  border-color: var(--purple-800);
+}
+
+.theme-btn-primary:focus {
+  --tw-ring-color: var(--purple-500);
+}
+
+.theme-btn-secondary {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-secondary);
+}
+
+.theme-btn-secondary:hover:not(:disabled) {
+  background-color: var(--bg-tertiary);
+  border-color: var(--border-primary);
+}
+
+.theme-btn-secondary:focus {
+  --tw-ring-color: var(--gray-500);
+}
+
+.theme-btn-danger {
+  background-color: var(--red-600);
+  color: var(--red-50);
+  border-color: var(--red-600);
+}
+
+.theme-btn-danger:hover:not(:disabled) {
+  background-color: var(--red-700);
+  border-color: var(--red-700);
+}
+
+.theme-btn-danger:focus {
+  --tw-ring-color: var(--red-500);
+}
+
+.theme-btn-success {
+  background-color: var(--emerald-600);
+  color: var(--emerald-50);
+  border-color: var(--emerald-600);
+}
+
+.theme-btn-success:hover:not(:disabled) {
+  background-color: var(--emerald-700);
+  border-color: var(--emerald-700);
+}
+
+.theme-btn-success:focus {
+  --tw-ring-color: var(--emerald-500);
+}
+
+/* Input themes */
+.theme-input-normal {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--border-secondary);
+}
+
+.theme-input-normal:focus {
+  border-color: var(--purple-600);
+  --tw-ring-color: var(--purple-500);
+}
+
+.theme-input-normal::placeholder {
+  color: var(--text-secondary);
+}
+
+.theme-input-error {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+  border-color: var(--red-600);
+}
+
+.theme-input-error:focus {
+  border-color: var(--red-600);
+  --tw-ring-color: var(--red-500);
+}
+
+.theme-input-disabled {
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+
+.theme-input-disabled::placeholder {
+  color: var(--text-secondary);
+}
+
+/* Progress bar theme */
+.theme-progress-bar {
+  background-color: var(--gray-200);
+}
+
+.theme-progress-fill {
+  background: linear-gradient(
+    90deg,
+    var(--primary-color),
+    var(--success-color)
+  );
+}
+
+/* Message box theme */
+.theme-message {
+  background-color: var(--bg-tertiary);
+  color: var(--text-secondary);
+}
+
+/* Checkbox themes */
+.theme-checkbox {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-secondary);
+}
+
+.theme-checkbox:hover:not([disabled]) {
+  border-color: var(--purple-500);
+  box-shadow: 0 0 0 3px var(--purple-100);
+}
+
+.theme-checkbox:focus-within {
+  box-shadow: 0 0 0 3px var(--purple-200);
+}
+
+.theme-checkbox-checked {
+  background-color: var(--purple-600);
+  border-color: var(--purple-600);
+}
+
+.theme-checkbox-icon {
+  color: var(--purple-50);
+}
+
+/* Toggle themes */
+.theme-toggle-track {
+  background: linear-gradient(
+    135deg,
+    var(--purple-400) 0%,
+    var(--purple-500) 100%
+  );
+}
+
+.theme-toggle-track-dark {
+  background: linear-gradient(
+    135deg,
+    var(--purple-800) 0%,
+    var(--purple-700) 100%
+  );
+}
+
+.theme-toggle-thumb {
+  background-color: var(--bg-secondary);
+}
+
+.theme-toggle-thumb-dark {
+  background-color: var(--slate-800);
+}
+
+.theme-toggle-button:hover {
+  background-color: var(--bg-tertiary);
+}
+
+.theme-toggle-button:focus {
+  outline-color: var(--purple-600);
+}
+
+.theme-toggle-sun {
+  color: var(--purple-700);
+}
+
+.theme-toggle-moon {
+  color: var(--purple-300);
+}
+
+/* Form/Error themes */
+.theme-error {
+  background-color: #fef2f2;
+  border-color: #fecaca;
+  color: var(--red-600);
+}
+
+/* Filter tab themes */
+.theme-filter-tabs {
+  background-color: var(--bg-tertiary);
+}
+
+.theme-filter-tab {
+  background-color: transparent;
+  color: var(--text-secondary);
+}
+
+.theme-filter-tab:hover:not(.active) {
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+}
+
+.theme-filter-tab-active {
+  background-color: var(--bg-secondary);
+  color: var(--purple-600);
+}
+
+.theme-filter-count {
+  background-color: var(--slate-200);
+  color: var(--slate-600);
+}
+
+.theme-filter-count-active {
+  background-color: var(--purple-600);
+  color: var(--purple-50);
+}
+
+/* Task summary themes */
+.theme-summary-card {
+  background-color: var(--bg-secondary);
+  border-color: var(--border-primary);
+}
+
+.theme-summary-number {
+  color: var(--gray-700);
+}
+
+.theme-summary-number-completed {
+  color: var(--emerald-600);
+}
+
+.theme-summary-number-pending {
+  color: var(--purple-600);
+}
+
+.theme-summary-label {
+  color: var(--gray-500);
+}
+
+.theme-summary-separator {
+  color: var(--gray-300);
+}
+
+.theme-summary-progress-bg {
+  background-color: var(--gray-200);
+}
+
+.theme-summary-progress-fill {
+  background: linear-gradient(90deg, var(--purple-600), var(--emerald-600));
+}
+
+.theme-summary-progress-text {
+  color: var(--gray-600);
+}
+
+.theme-summary-message {
+  color: var(--text-secondary);
+  background-color: var(--bg-tertiary);
+}

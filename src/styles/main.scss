@@ -1,0 +1,39 @@
+/**
+ * Main SCSS Entry Point
+ * Vue 3 Todo App - Hybrid Tailwind CSS + SCSS Styling System
+ */
+
+// Import theme variables first (CSS custom properties for dark/light mode)
+@import "./scss/theme-variables.scss";
+
+// Tailwind CSS layers - order is important!
+@tailwind base; // Normalize, typography, base styles
+@tailwind components; // Component layer utilities
+@tailwind utilities; // Utility classes (margin, padding, colors, etc.)
+
+// Theme utility classes that work with Tailwind
+@import "./scss/theme-utilities.scss";
+
+// Component-specific styles (when Tailwind utilities aren't sufficient)
+@import "./scss/components.scss";
+
+/**
+ * Global Base Styles
+ * Applied to the entire application
+ */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  color: var(--text-primary);
+  background-color: var(--bg-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+*:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}

@@ -1,0 +1,228 @@
+/* Component-specific styles using Tailwind + SCSS hybrid approach */
+
+/* Button Components */
+.btn {
+  @apply inline-flex items-center justify-center font-medium rounded-md transition-all duration-150 cursor-pointer select-none no-underline whitespace-nowrap;
+
+  /* Size variants using Tailwind utilities */
+  &--small {
+    @apply px-3 py-2 text-sm min-h-8;
+  }
+
+  &--medium {
+    @apply px-4 py-3 text-base min-h-10;
+  }
+
+  &--large {
+    @apply px-6 py-4 text-lg min-h-12;
+  }
+
+  /* Color variants - keeping your theme system */
+  &--primary {
+    background-color: var(--purple-700);
+    color: var(--purple-50);
+    border: 1px solid var(--purple-700);
+    @apply shadow-sm;
+
+    &:hover:not(.btn--disabled) {
+      background-color: var(--purple-800);
+      border-color: var(--purple-800);
+      @apply shadow-md -translate-y-px;
+    }
+  }
+
+  &--secondary {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--border-secondary);
+    @apply shadow-sm;
+
+    &:hover:not(.btn--disabled) {
+      background-color: var(--bg-tertiary);
+      border-color: var(--border-primary);
+      @apply shadow-md;
+    }
+  }
+
+  &--danger {
+    background-color: var(--red-600);
+    color: var(--red-50);
+    border: 1px solid var(--red-600);
+    @apply shadow-sm;
+
+    &:hover:not(.btn--disabled) {
+      background-color: var(--red-700);
+      border-color: var(--red-700);
+      @apply shadow-md -translate-y-px;
+    }
+  }
+
+  &--success {
+    background-color: var(--emerald-600);
+    color: var(--emerald-50);
+    border: 1px solid var(--emerald-600);
+    @apply shadow-sm;
+
+    &:hover:not(.btn--disabled) {
+      background-color: var(--emerald-700);
+      border-color: var(--emerald-700);
+      @apply shadow-md -translate-y-px;
+    }
+  }
+
+  /* Disabled state */
+  &--disabled {
+    @apply opacity-60 cursor-not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+}
+
+/* Input Components */
+.input {
+  @apply w-full rounded-md transition-all duration-150;
+  border: 1px solid var(--border-secondary);
+  background-color: var(--bg-secondary);
+  color: var(--text-primary);
+
+  &:focus {
+    @apply outline-none;
+    border-color: var(--purple-600);
+    box-shadow: 0 0 0 3px var(--purple-100);
+  }
+
+  &::placeholder {
+    color: var(--text-secondary);
+  }
+
+  /* Size variants */
+  &--small {
+    @apply px-3 py-2 text-sm min-h-8;
+  }
+
+  &--medium {
+    @apply px-4 py-3 text-base min-h-10;
+  }
+
+  &--large {
+    @apply px-5 py-4 text-lg min-h-12;
+  }
+
+  /* Error state */
+  &--error {
+    border-color: var(--red-600);
+
+    &:focus {
+      border-color: var(--red-600);
+      box-shadow: 0 0 0 3px var(--red-100);
+    }
+  }
+
+  /* Disabled state */
+  &--disabled {
+    background-color: var(--bg-tertiary);
+    color: var(--text-secondary);
+    @apply cursor-not-allowed;
+
+    &::placeholder {
+      color: var(--text-secondary);
+    }
+  }
+}
+
+/* Checkbox Components */
+.checkbox {
+  @apply inline-flex items-center cursor-pointer select-none gap-3;
+
+  &--disabled {
+    @apply cursor-not-allowed opacity-60;
+  }
+
+  &__input {
+    @apply absolute opacity-0 w-0 h-0;
+  }
+
+  &__checkmark {
+    @apply relative w-5 h-5 rounded-sm transition-all duration-150 flex items-center justify-center flex-shrink-0;
+    border: 2px solid var(--border-secondary);
+    background-color: var(--bg-secondary);
+
+    &--checked {
+      background-color: var(--purple-600);
+      border-color: var(--purple-600);
+    }
+  }
+
+  &__icon {
+    @apply w-3.5 h-3.5;
+    color: var(--purple-50);
+    animation: checkmark-appear var(--transition-fast) ease-in-out;
+  }
+
+  &__label {
+    @apply text-base leading-6;
+    color: var(--text-primary);
+  }
+
+  /* Hover states */
+  &:hover:not(.checkbox--disabled) .checkbox__checkmark {
+    border-color: var(--purple-500);
+    box-shadow: 0 0 0 3px var(--purple-100);
+  }
+
+  /* Focus states */
+  &__input:focus + .checkbox__checkmark {
+    box-shadow: 0 0 0 3px var(--purple-200);
+  }
+}
+
+/* Mobile optimizations */
+@media (max-width: 639px) {
+  .btn {
+    @apply min-h-11; /* 44px minimum tappable area for mobile */
+
+    &--small {
+      @apply min-h-9; /* 36px */
+    }
+
+    &--large {
+      @apply min-h-12; /* 48px */
+    }
+  }
+
+  .input {
+    @apply min-h-11 text-base; /* Prevent zoom on iOS */
+
+    &--small {
+      @apply min-h-10;
+    }
+
+    &--large {
+      @apply min-h-12;
+    }
+  }
+
+  .checkbox {
+    @apply gap-4;
+
+    &__checkmark {
+      @apply w-6 h-6;
+    }
+
+    &__icon {
+      @apply w-4 h-4;
+    }
+  }
+}
+
+/* Animations */
+@keyframes checkmark-appear {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

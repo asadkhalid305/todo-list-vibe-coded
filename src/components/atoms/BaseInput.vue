@@ -70,15 +70,43 @@ const handleInput = (event) => {
   emit("update:modelValue", event.target.value);
 };
 
-// Computed classes
-const inputClasses = computed(() => [
-  "input",
-  `input--${props.size}`,
-  {
-    "input--error": props.error,
-    "input--disabled": props.disabled,
-  },
-]);
+// Computed classes using Tailwind utilities
+const inputClasses = computed(() => {
+  const baseClasses = [
+    "w-full",
+    "border",
+    "rounded-md",
+    "transition-all",
+    "duration-150",
+    "font-inherit",
+    "focus:outline-none",
+    "focus:ring-2",
+    "focus:ring-offset-1",
+    "placeholder:text-gray-500",
+  ];
+
+  // Size variants
+  const sizeClasses = {
+    small: ["px-3", "py-2", "text-sm", "min-h-8"],
+    medium: ["px-4", "py-3", "text-base", "min-h-10"],
+    large: ["px-5", "py-4", "text-lg", "min-h-12"],
+  };
+
+  // State classes
+  const stateClasses = [];
+
+  if (props.error) {
+    stateClasses.push("theme-input-error", "focus:ring-red-500");
+  } else {
+    stateClasses.push("theme-input-normal", "focus:ring-purple-500");
+  }
+
+  if (props.disabled) {
+    stateClasses.push("theme-input-disabled", "cursor-not-allowed");
+  }
+
+  return [...baseClasses, ...sizeClasses[props.size], ...stateClasses];
+});
 
 // Expose methods
 defineExpose({
@@ -86,81 +114,3 @@ defineExpose({
   blur: () => inputRef.value?.blur(),
 });
 </script>
-
-<style scoped>
-.input {
-  width: 100%;
-  border: 1px solid var(--border-secondary);
-  border-radius: var(--radius-md);
-  background-color: var(--bg-secondary);
-  color: var(--text-primary);
-  transition: all var(--transition-fast);
-  font-family: inherit;
-}
-
-.input:focus {
-  outline: none;
-  border-color: var(--purple-600);
-  box-shadow: 0 0 0 3px var(--purple-100);
-}
-
-.input::placeholder {
-  color: var(--text-secondary);
-}
-
-/* Size variants */
-.input--small {
-  padding: var(--space-2) var(--space-3);
-  font-size: var(--font-size-sm);
-  min-height: 2rem;
-}
-
-.input--medium {
-  padding: var(--space-3) var(--space-4);
-  font-size: var(--font-size-base);
-  min-height: 2.5rem;
-}
-
-.input--large {
-  padding: var(--space-4) var(--space-5);
-  font-size: var(--font-size-lg);
-  min-height: 3rem;
-}
-
-/* Error state */
-.input--error {
-  border-color: var(--red-600);
-}
-
-.input--error:focus {
-  border-color: var(--red-600);
-  box-shadow: 0 0 0 3px var(--red-100);
-}
-
-/* Disabled state */
-.input--disabled {
-  background-color: var(--bg-tertiary);
-  color: var(--text-secondary);
-  cursor: not-allowed;
-}
-
-.input--disabled::placeholder {
-  color: var(--text-secondary);
-}
-
-/* Mobile optimizations */
-@media (max-width: 639px) {
-  .input {
-    min-height: 44px; /* Minimum tappable area */
-    font-size: 16px; /* Prevent zoom on iOS */
-  }
-
-  .input--small {
-    min-height: 40px;
-  }
-
-  .input--large {
-    min-height: 48px;
-  }
-}
-</style>

@@ -1,7 +1,7 @@
 {
   "name": "todo-app-with-ai",
   "version": "1.0.0",
-  "description": "Responsive To-Do List application built with Vue 3",
+  "description": "Modern responsive To-Do List app with Vue 3, Tailwind CSS, and dark mode theming",
   "main": "index.html",
   "scripts": {
     "dev": "vite",
@@ -13,13 +13,25 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.0",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
+    "sass": "^1.89.2",
+    "tailwindcss": "^3.4.17",
     "vite": "^5.0.0"
   },
   "keywords": [
     "vue",
+    "vue3",
     "todo",
+    "todolist",
+    "tailwindcss",
+    "scss",
     "responsive",
-    "composition-api"
+    "dark-mode",
+    "composition-api",
+    "atomic-design",
+    "accessibility",
+    "vite"
   ],
   "author": "GitHub Copilot",
   "license": "MIT"

@@ -1,24 +1,20 @@
 <!-- 
   ATOM: Dark Mode Toggle Component
-  Toggle switch with night and morning icons for dark/light mode
+  Toggle switch with night and morning icons for dark/light mode using Tailwind utilities
 -->
 <template>
   <button
-    class="dark-mode-toggle"
-    :class="{ 'dark-mode-toggle--dark': isDark }"
+    :class="toggleClasses.button"
     @click="toggleTheme"
     :aria-label="isDark ? 'Switch to light mode' : 'Switch to dark mode'"
     :aria-pressed="isDark"
   >
-    <div class="dark-mode-toggle__track">
-      <div
-        class="dark-mode-toggle__thumb"
-        :class="{ 'dark-mode-toggle__thumb--dark': isDark }"
-      >
+    <div :class="toggleClasses.track">
+      <div :class="toggleClasses.thumb">
         <!-- Sun Icon (Light Mode) -->
         <svg
           v-if="!isDark"
-          class="dark-mode-toggle__icon dark-mode-toggle__icon--sun"
+          class="w-3.5 h-3.5 sm:w-4 sm:h-4 theme-toggle-sun animate-[sun-rays_2s_ease-in-out_infinite_alternate] transition-all duration-200"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -32,7 +28,7 @@
         <!-- Moon Icon (Dark Mode) -->
         <svg
           v-else
-          class="dark-mode-toggle__icon dark-mode-toggle__icon--moon"
+          class="w-3.5 h-3.5 sm:w-4 sm:h-4 theme-toggle-moon animate-[moon-glow_3s_ease-in-out_infinite_alternate] transition-all duration-200"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
@@ -51,6 +47,7 @@
 
 <script setup>
 import { computed } from "vue";
+import { useThemeClasses } from "@/composables/useThemeClasses";
 
 // Props definition
 const props = defineProps({
@@ -66,6 +63,12 @@ const emit = defineEmits(["update:modelValue"]);
 // Computed properties
 const isDark = computed(() => props.modelValue);
 
+// Theme classes
+const { getToggleClasses } = useThemeClasses();
+
+// Computed classes
+const toggleClasses = computed(() => getToggleClasses(isDark.value));
+
 // Methods
 const toggleTheme = () => {
   emit("update:modelValue", !props.modelValue);
@@ -73,85 +76,6 @@ const toggleTheme = () => {
 </script>
 
 <style scoped>
-.dark-mode-toggle {
-  position: relative;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: var(--space-2);
-  border-radius: var(--radius-xl);
-  transition: all var(--transition-fast);
-}
-
-.dark-mode-toggle:hover {
-  background-color: var(--bg-tertiary);
-}
-
-.dark-mode-toggle:focus {
-  outline: 2px solid var(--primary-color);
-  outline-offset: 2px;
-}
-
-.dark-mode-toggle__track {
-  position: relative;
-  width: 3.5rem;
-  height: 1.75rem;
-  background: linear-gradient(
-    135deg,
-    var(--purple-400) 0%,
-    var(--purple-500) 100%
-  );
-  border-radius: var(--radius-xl);
-  transition: all var(--transition-normal);
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.dark-mode-toggle--dark .dark-mode-toggle__track {
-  background: linear-gradient(
-    135deg,
-    var(--purple-800) 0%,
-    var(--purple-700) 100%
-  );
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
-}
-
-.dark-mode-toggle__thumb {
-  position: absolute;
-  top: 0.125rem;
-  left: 0.125rem;
-  width: 1.5rem;
-  height: 1.5rem;
-  background: var(--bg-secondary);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all var(--transition-normal);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transform: translateX(0);
-}
-
-.dark-mode-toggle__thumb--dark {
-  transform: translateX(1.75rem);
-  background: var(--slate-800);
-}
-
-.dark-mode-toggle__icon {
-  width: 1rem;
-  height: 1rem;
-  transition: all var(--transition-fast);
-}
-
-.dark-mode-toggle__icon--sun {
-  color: var(--purple-700);
-  animation: sun-rays 2s ease-in-out infinite alternate;
-}
-
-.dark-mode-toggle__icon--moon {
-  color: var(--purple-300);
-  animation: moon-glow 3s ease-in-out infinite alternate;
-}
-
 /* Screen reader only class */
 .sr-only {
   position: absolute;
@@ -186,53 +110,27 @@ const toggleTheme = () => {
   }
 }
 
-/* Mobile optimizations */
-@media (max-width: 639px) {
-  .dark-mode-toggle {
-    padding: var(--space-3);
-  }
-
-  .dark-mode-toggle__track {
-    width: 3rem;
-    height: 1.5rem;
-  }
-
-  .dark-mode-toggle__thumb {
-    width: 1.25rem;
-    height: 1.25rem;
-  }
-
-  .dark-mode-toggle__thumb--dark {
-    transform: translateX(1.5rem);
-  }
-
-  .dark-mode-toggle__icon {
-    width: 0.875rem;
-    height: 0.875rem;
-  }
-}
-
 /* Reduced motion preferences */
 @media (prefers-reduced-motion: reduce) {
-  .dark-mode-toggle__track,
-  .dark-mode-toggle__thumb,
-  .dark-mode-toggle__icon {
+  .duration-200,
+  .duration-300,
+  .transition-all {
     transition: none;
   }
 
-  .dark-mode-toggle__icon--sun,
-  .dark-mode-toggle__icon--moon {
+  .animate-\[sun-rays_2s_ease-in-out_infinite_alternate\],
+  .animate-\[moon-glow_3s_ease-in-out_infinite_alternate\] {
     animation: none;
   }
 }
 
 /* High contrast mode */
 @media (prefers-contrast: high) {
-  .dark-mode-toggle__track {
+  .theme-toggle-track {
     border: 2px solid currentColor;
   }
 
-  .dark-mode-toggle__thumb {
+  .theme-toggle-thumb {
     border: 1px solid currentColor;
   }
 }
