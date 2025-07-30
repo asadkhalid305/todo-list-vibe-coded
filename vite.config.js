@@ -4,6 +4,9 @@ import { resolve } from "path";
 
 // Vite configuration for Vue 3 Todo App
 export default defineConfig({
+  // Base URL for GitHub Pages deployment
+  base: process.env.NODE_ENV === "production" ? "/todo-list-vibe-coded/" : "/",
+
   // Plugins for Vue 3 SFC support
   plugins: [vue()],
 
