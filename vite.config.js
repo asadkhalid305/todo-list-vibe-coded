@@ -36,6 +36,11 @@ export default defineConfig({
       scss: {
         api: "modern-compiler", // Use modern Sass API to avoid deprecation warning
         quietDeps: true, // Silence deprecation warnings from dependencies
+        // TODO: Replace @import "tailwindcss" with proper Tailwind CSS v4 solution
+        // Current approach uses Sass @import which is deprecated in Dart Sass 3.0.0
+        // This silences the warning temporarily until Tailwind CSS v4 ecosystem matures
+        // Future solutions: CSS @import, @layer directives, or official v4 migration guide
+        silenceDeprecations: ["import"], // Suppress @import deprecation warning for Tailwind CSS v4
       },
     },
   },

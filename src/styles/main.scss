@@ -3,15 +3,13 @@
  * Vue 3 Todo App - Hybrid Tailwind CSS + SCSS Styling System
  */
 
-// All @use statements must come first
+// All @use statements must come first (Sass requirement)
 @use "./scss/theme-variables.scss";
 @use "./scss/theme-utilities.scss";
 @use "./scss/components.scss";
 
-// Tailwind CSS layers - order is important!
-@tailwind base; // Normalize, typography, base styles
-@tailwind components; // Component layer utilities
-@tailwind utilities; // Utility classes (margin, padding, colors, etc.)
+// Tailwind CSS v4 imports - must come after @use statements
+@import "tailwindcss";
 
 /**
  * Global Base Styles
