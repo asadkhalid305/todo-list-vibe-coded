@@ -55,14 +55,10 @@
         </section>
 
         <!-- Filter tabs -->
-        <section
-          v-if="tasks.length > 0"
-          class="w-full"
-          aria-label="Filter tasks"
-        >
+        <section v-if="totalTasks > 0" class="w-full" aria-label="Filter tasks">
           <FilterTabs
             :current-filter="currentFilter"
-            :total-tasks="tasks.length"
+            :total-tasks="totalTasks"
             :completed-tasks="completedTasks"
             :pending-tasks="pendingTasks"
             @filter-change="handleFilterChange"
@@ -85,13 +81,13 @@
         <!-- Task summary -->
         <Transition name="summary" mode="out-in">
           <section
-            v-if="tasks.length > 0"
+            v-if="totalTasks > 0"
             key="summary-present"
             class="w-full"
             aria-label="Task summary"
           >
             <TaskSummary
-              :total-tasks="tasks.length"
+              :total-tasks="totalTasks"
               :completed-tasks="completedTasks"
               :pending-tasks="pendingTasks"
             />
@@ -110,7 +106,6 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
 import TaskForm from "../molecules/TaskForm.vue";
 import FilterTabs from "../molecules/FilterTabs.vue";
 import TaskList from "../organisms/TaskList.vue";
@@ -123,6 +118,21 @@ const props = defineProps({
     type: Array,
     required: true,
     default: () => [],
+  },
+  totalTasks: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
+  completedTasks: {
+    type: Number,
+    required: true,
+    default: 0,
+  },
+  pendingTasks: {
+    type: Number,
+    required: true,
+    default: 0,
   },
   currentFilter: {
     type: String,
@@ -147,15 +157,6 @@ const emit = defineEmits([
   "filter-change",
   "theme-toggle",
 ]);
-
-// Computed properties
-const completedTasks = computed(
-  () => props.tasks.filter((task) => task.completed).length
-);
-
-const pendingTasks = computed(
-  () => props.tasks.filter((task) => !task.completed).length
-);
 
 // Event handlers
 const handleAddTask = (taskText) => {

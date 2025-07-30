@@ -5,6 +5,9 @@
 <template>
   <TodoLayout
     :tasks="filteredTasks"
+    :total-tasks="taskCounts.all"
+    :completed-tasks="taskCounts.completed"
+    :pending-tasks="taskCounts.pending"
     :current-filter="currentFilter"
     :is-submitting="isSubmitting"
     :is-dark-mode="isDarkMode"
@@ -27,6 +30,7 @@ const {
   currentFilter,
   isSubmitting,
   isDarkMode,
+  taskCounts,
 
   // Actions
   addTask,
