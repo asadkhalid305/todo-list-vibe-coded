@@ -12,10 +12,10 @@
 @tailwind utilities; // Utility classes (margin, padding, colors, etc.)
 
 // Theme utility classes that work with Tailwind
-@import "./scss/theme-utilities.scss";
+@import "./scss/theme-utilities.scss"; // Re-enabled to test
 
 // Component-specific styles (when Tailwind utilities aren't sufficient)
-@import "./scss/components.scss";
+@import "./scss/components.scss"; // Re-enabled to test if this causes the issue
 
 /**
  * Global Base Styles

@@ -4,32 +4,36 @@
  */
 
 import { computed, ref } from "vue";
+import type { Ref, ComputedRef } from "vue";
+import type { Task, TaskStatistics } from "../types";
 
-export const useTaskStatistics = (tasks) => {
+export const useTaskStatistics = (tasks: Ref<Task[]>) => {
   // Basic counts
-  const totalTasks = computed(() => tasks.value?.length || 0);
+  const totalTasks: ComputedRef<number> = computed(
+    () => tasks.value?.length || 0
+  );
 
-  const completedTasks = computed(
+  const completedTasks: ComputedRef<number> = computed(
     () => tasks.value?.filter((task) => task.completed).length || 0
   );
 
-  const pendingTasks = computed(
+  const pendingTasks: ComputedRef<number> = computed(
     () => tasks.value?.filter((task) => !task.completed).length || 0
   );
 
   // Completion statistics
-  const completionPercentage = computed(() => {
+  const completionPercentage: ComputedRef<number> = computed(() => {
     if (totalTasks.value === 0) return 0;
     return Math.round((completedTasks.value / totalTasks.value) * 100);
   });
 
-  const completionRate = computed(() => {
+  const completionRate: ComputedRef<number> = computed(() => {
     if (totalTasks.value === 0) return 0;
     return +(completedTasks.value / totalTasks.value).toFixed(2);
   });
 
   // Progress categorization
-  const progressCategory = computed(() => {
+  const progressCategory: ComputedRef<string> = computed(() => {
     const percentage = completionPercentage.value;
 
     if (percentage === 0) return "not-started";
@@ -41,7 +45,7 @@ export const useTaskStatistics = (tasks) => {
   });
 
   // Motivational messages based on progress
-  const motivationalMessages = {
+  const motivationalMessages: Record<string, string[]> = {
     "not-started": [
       "📝 Ready to tackle your tasks?",
       "🚀 Let's get started!",
@@ -155,13 +159,15 @@ export const useTaskStatistics = (tasks) => {
 
   // Performance metrics
   const performanceMetrics = computed(() => {
-    const metrics = {
+    const metrics: TaskStatistics & { rating: string; ratingIcon: string } = {
       totalTasks: totalTasks.value,
       completedTasks: completedTasks.value,
       pendingTasks: pendingTasks.value,
       completionRate: completionRate.value,
       completionPercentage: completionPercentage.value,
       progressCategory: progressCategory.value,
+      rating: "getting-started",
+      ratingIcon: "✨",
     };
 
     // Add performance rating
@@ -186,7 +192,7 @@ export const useTaskStatistics = (tasks) => {
   });
 
   // Filter-specific statistics
-  const getFilterStats = (filter) => {
+  const getFilterStats = (filter: string): number => {
     if (filter === "all") return totalTasks.value;
     if (filter === "pending") return pendingTasks.value;
     if (filter === "completed") return completedTasks.value;
@@ -281,7 +287,7 @@ export const useTaskStatistics = (tasks) => {
 };
 
 // Specialized hook for task summary components
-export const useTaskSummary = (tasks) => {
+export const useTaskSummary = (tasks: Ref<Task[]>) => {
   const stats = useTaskStatistics(tasks);
 
   const shouldShowSummary = computed(() => stats.totalTasks.value > 0);

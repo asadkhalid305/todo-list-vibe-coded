@@ -3,9 +3,42 @@
  * This provides a bridge between Tailwind utilities and our CSS custom properties
  */
 
+interface SizeClasses {
+  small: string[];
+  medium: string[];
+  large: string[];
+  [key: string]: string[];
+}
+
+interface SpacingClasses {
+  xs: string[];
+  sm: string[];
+  md: string[];
+  lg: string[];
+  xl: string[];
+}
+
+interface ThemeClassesType {
+  card: string[];
+  cardHover: string[];
+  buttonBase: string[];
+  inputBase: string[];
+  textPrimary: string[];
+  textSecondary: string[];
+  textMuted: string[];
+  bgPrimary: string[];
+  bgSecondary: string[];
+  bgTertiary: string[];
+  spacing: SpacingClasses;
+  sizes: {
+    button: SizeClasses;
+    input: SizeClasses;
+  };
+}
+
 export const useThemeClasses = () => {
   // Base component classes that work with our theme variables
-  const themeClasses = {
+  const themeClasses: ThemeClassesType = {
     // Card/Container styles
     card: [
       "rounded-lg",
@@ -86,7 +119,7 @@ export const useThemeClasses = () => {
   };
 
   // Utility function to combine classes
-  const combineClasses = (...classArrays) => {
+  const combineClasses = (...classArrays: (string | string[])[]): string => {
     return classArrays.flat().filter(Boolean).join(" ");
   };
 
@@ -124,7 +157,7 @@ export const useThemeClasses = () => {
     size = "medium",
     error = false,
     disabled = false
-  ) => {
+  ): string => {
     const classes = [
       ...themeClasses.inputBase,
       ...themeClasses.sizes.input[size],
@@ -138,14 +171,17 @@ export const useThemeClasses = () => {
     return combineClasses(classes);
   };
 
-  const getTextClasses = (variant = "primary", size = "base") => {
+  const getTextClasses = (variant = "primary", size = "base"): string => {
+    const textKey = `text${
+      variant.charAt(0).toUpperCase() + variant.slice(1)
+    }` as keyof ThemeClassesType;
     return combineClasses(
-      themeClasses[`text${variant.charAt(0).toUpperCase() + variant.slice(1)}`],
+      (themeClasses as any)[textKey] || themeClasses.textPrimary,
       `text-${size}`
     );
   };
 
-  const getCheckboxClasses = (checked = false, disabled = false) => {
+  const getCheckboxClasses = (checked = false, disabled = false): string => {
     const classes = [
       "relative",
       "w-5",
@@ -174,7 +210,7 @@ export const useThemeClasses = () => {
     return combineClasses(classes);
   };
 
-  const getCheckboxContainerClasses = (disabled = false) => {
+  const getCheckboxContainerClasses = (disabled = false): string => {
     const classes = ["inline-flex", "items-center", "gap-3", "select-none"];
 
     if (disabled) {
@@ -186,7 +222,7 @@ export const useThemeClasses = () => {
     return combineClasses(classes);
   };
 
-  const getToggleClasses = (isDark = false) => {
+  const getToggleClasses = (isDark = false): Record<string, string> => {
     const buttonClasses = [
       "relative",
       "p-2",

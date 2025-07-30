@@ -2,10 +2,10 @@
  * Filter and Search Types
  */
 
-export type FilterType = 'all' | 'pending' | 'completed';
+export type FilterType = "all" | "pending" | "completed";
 
-export type SortBy = 'created' | 'updated' | 'text' | 'status';
-export type SortOrder = 'asc' | 'desc';
+export type SortBy = "created" | "updated" | "text" | "status";
+export type SortOrder = "asc" | "desc";
 
 export interface FilterState {
   currentFilter: FilterType;

@@ -4,34 +4,47 @@
  */
 
 import { ref, computed, readonly } from "vue";
+import type { Ref, ComputedRef } from "vue";
+import type {
+  ValidationRule,
+  ValidationErrors,
+  ValidationRules,
+  FieldConfig,
+  FormValidationConfig,
+  ValidationOptions,
+} from "../types";
 
 export const useFormValidation = () => {
   // Validation state
-  const errors = ref({});
-  const touched = ref({});
+  const errors: Ref<ValidationErrors> = ref({});
+  const touched: Ref<Record<string, boolean>> = ref({});
 
   // Validation rules
-  const validationRules = {
-    required: (value, fieldName) => {
+  const validationRules: ValidationRules = {
+    required: (value: any, fieldName: string): string | null => {
       const trimmed = typeof value === "string" ? value.trim() : value;
       return !trimmed ? `${fieldName} is required` : null;
     },
 
-    minLength: (min) => (value, fieldName) => {
-      const trimmed = typeof value === "string" ? value.trim() : value;
-      return trimmed && trimmed.length < min
-        ? `${fieldName} must be at least ${min} characters`
-        : null;
-    },
+    minLength:
+      (min: number): ValidationRule =>
+      (value: any, fieldName: string): string | null => {
+        const trimmed = typeof value === "string" ? value.trim() : value;
+        return trimmed && trimmed.length < min
+          ? `${fieldName} must be at least ${min} characters`
+          : null;
+      },
 
-    maxLength: (max) => (value, fieldName) => {
-      const trimmed = typeof value === "string" ? value.trim() : value;
-      return trimmed && trimmed.length > max
-        ? `${fieldName} cannot exceed ${max} characters`
-        : null;
-    },
+    maxLength:
+      (max: number): ValidationRule =>
+      (value: any, fieldName: string): string | null => {
+        const trimmed = typeof value === "string" ? value.trim() : value;
+        return trimmed && trimmed.length > max
+          ? `${fieldName} cannot exceed ${max} characters`
+          : null;
+      },
 
-    email: (value, fieldName) => {
+    email: (value: any, fieldName: string): string | null => {
       if (!value) return null;
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return !emailRegex.test(value)
@@ -39,14 +52,21 @@ export const useFormValidation = () => {
         : null;
     },
 
-    pattern: (regex, message) => (value, fieldName) => {
-      if (!value) return null;
-      return !regex.test(value) ? message : null;
-    },
+    pattern:
+      (regex: RegExp, message: string): ValidationRule =>
+      (value: any, fieldName: string): string | null => {
+        if (!value) return null;
+        return !regex.test(value) ? message : null;
+      },
 
-    custom: (validateFn) => (value, fieldName) => {
-      return validateFn(value, fieldName);
-    },
+    custom:
+      (validateFn: (value: any) => boolean | string | null): ValidationRule =>
+      (value: any, fieldName: string): string | null => {
+        const result = validateFn(value);
+        if (typeof result === "string") return result;
+        if (result === null) return null;
+        return result ? null : `${fieldName} is invalid`;
+      },
   };
 
   // Task-specific validation rules
@@ -65,7 +85,11 @@ export const useFormValidation = () => {
   };
 
   // Validate a single field
-  const validateField = (fieldName, value, rules = []) => {
+  const validateField = (
+    fieldName: string,
+    value: any,
+    rules: ValidationRule[] = []
+  ): boolean => {
     const fieldErrors = [];
 
     for (const rule of rules) {
@@ -81,7 +105,7 @@ export const useFormValidation = () => {
   };
 
   // Validate multiple fields
-  const validateFields = (fieldsConfig) => {
+  const validateFields = (fieldsConfig: FormValidationConfig): boolean => {
     let isValid = true;
 
     Object.entries(fieldsConfig).forEach(([fieldName, { value, rules }]) => {
@@ -93,28 +117,28 @@ export const useFormValidation = () => {
   };
 
   // Clear error for a field
-  const clearFieldError = (fieldName) => {
+  const clearFieldError = (fieldName: string): void => {
     errors.value[fieldName] = null;
   };
 
   // Clear all errors
-  const clearAllErrors = () => {
+  const clearAllErrors = (): void => {
     errors.value = {};
     touched.value = {};
   };
 
   // Mark field as touched
-  const touchField = (fieldName) => {
+  const touchField = (fieldName: string): void => {
     touched.value[fieldName] = true;
   };
 
   // Check if field has error
-  const hasFieldError = (fieldName) => {
+  const hasFieldError = (fieldName: string): boolean => {
     return Boolean(errors.value[fieldName]);
   };
 
   // Get field error message
-  const getFieldError = (fieldName) => {
+  const getFieldError = (fieldName: string): string | null => {
     return errors.value[fieldName] || null;
   };
 
@@ -128,13 +152,16 @@ export const useFormValidation = () => {
   });
 
   // Task-specific validation helper
-  const validateTaskText = (text) => {
+  const validateTaskText = (text: string): boolean => {
     return validateField("taskText", text, taskValidationRules.taskText);
   };
 
   // Form submission helper
-  const validateForm = (formData, validationConfig) => {
-    const fieldsConfig = {};
+  const validateForm = (
+    formData: Record<string, any>,
+    validationConfig: Record<string, ValidationRule[]>
+  ): boolean => {
+    const fieldsConfig: FormValidationConfig = {};
 
     Object.entries(validationConfig).forEach(([fieldName, rules]) => {
       fieldsConfig[fieldName] = {
@@ -147,14 +174,19 @@ export const useFormValidation = () => {
   };
 
   // Real-time validation setup
-  const setupFieldValidation = (fieldName, valueRef, rules, options = {}) => {
+  const setupFieldValidation = (
+    fieldName: string,
+    valueRef: Ref<any>,
+    rules: ValidationRule[],
+    options: ValidationOptions = {}
+  ) => {
     const {
       validateOnBlur = true,
       validateOnInput = false,
       debounceMs = 300,
     } = options;
 
-    let debounceTimeout = null;
+    let debounceTimeout: ReturnType<typeof setTimeout> | null = null;
 
     const validate = () => {
       validateField(fieldName, valueRef.value, rules);
@@ -215,7 +247,10 @@ export const useFormValidation = () => {
 export const useTaskFormValidation = () => {
   const validation = useFormValidation();
 
-  const validateAndSubmit = async (taskText, onSubmit) => {
+  const validateAndSubmit = async (
+    taskText: string,
+    onSubmit: (text: string) => Promise<void>
+  ): Promise<{ success: boolean; error: string | null }> => {
     const isValid = validation.validateTaskText(taskText);
 
     if (isValid) {
@@ -223,8 +258,10 @@ export const useTaskFormValidation = () => {
         await onSubmit(taskText.trim());
         return { success: true, error: null };
       } catch (error) {
-        const errorMessage = error.message || "Failed to add task";
-        validation.errors.value.taskText = errorMessage;
+        const errorMessage = (error as Error).message || "Failed to add task";
+        validation.clearFieldError("taskText");
+        // Manually set error since errors might be readonly
+        Object.assign(validation.errors.value, { taskText: errorMessage });
         return { success: false, error: errorMessage };
       }
     }

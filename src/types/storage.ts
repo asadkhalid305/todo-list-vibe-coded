@@ -2,9 +2,9 @@
  * Storage and Persistence Types
  */
 
-import type { Task } from './task';
-import type { FilterState } from './filter';
-import type { ThemeConfig } from './theme';
+import type { Task } from "./task";
+import type { FilterState } from "./filter";
+import type { ThemeConfig } from "./theme";
 
 export interface StorageData {
   tasks: Task[];
@@ -13,6 +13,14 @@ export interface StorageData {
   theme?: ThemeConfig;
   version?: string;
   lastUpdated?: string;
+  // Extended properties for compatibility with existing code
+  nextId?: number;
+  currentFilter?: string;
+  searchQuery?: string;
+  sortBy?: string;
+  sortOrder?: string;
+  isDarkMode?: boolean;
+  hasManualPreference?: boolean;
 }
 
 export interface StorageOptions {
@@ -29,7 +37,7 @@ export interface AutoSaveConfig extends StorageOptions {
 export interface ExportData extends StorageData {
   exportedAt: string;
   appVersion: string;
-  format: 'json' | 'csv' | 'txt';
+  format: "json" | "csv" | "txt";
 }
 
 export interface ImportResult {

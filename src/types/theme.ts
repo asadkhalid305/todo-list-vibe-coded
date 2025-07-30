@@ -2,7 +2,7 @@
  * Theme and UI Types
  */
 
-export type ThemeMode = 'light' | 'dark' | 'auto';
+export type ThemeMode = "light" | "dark" | "auto";
 
 export interface ThemeInfo {
   isDark: boolean;
@@ -28,15 +28,15 @@ export interface ThemeConfig {
   reducedMotion: boolean;
 }
 
-export type ThemeVariableName = 
-  | '--color-primary'
-  | '--color-secondary' 
-  | '--color-accent'
-  | '--color-bg-primary'
-  | '--color-bg-secondary'
-  | '--color-text-primary'
-  | '--color-text-secondary'
-  | '--color-border';
+export type ThemeVariableName =
+  | "--color-primary"
+  | "--color-secondary"
+  | "--color-accent"
+  | "--color-bg-primary"
+  | "--color-bg-secondary"
+  | "--color-text-primary"
+  | "--color-text-secondary"
+  | "--color-border";
 
-export type ComponentSize = 'small' | 'medium' | 'large';
-export type ComponentVariant = 'primary' | 'secondary' | 'muted';
+export type ComponentSize = "small" | "medium" | "large";
+export type ComponentVariant = "primary" | "secondary" | "muted";

@@ -2,8 +2,8 @@
  * Statistics and Analytics Types
  */
 
-import type { Task } from './task';
-import type { FilterType } from './filter';
+import type { Task } from "./task";
+import type { FilterType } from "./filter";
 
 export interface TaskStatistics {
   totalTasks: number;

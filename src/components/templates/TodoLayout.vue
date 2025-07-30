@@ -152,10 +152,10 @@ const props = defineProps({
 // Emits definition
 const emit = defineEmits([
   "add-task",
-  "toggle-complete",
+  "toggle-task",
   "delete-task",
-  "filter-change",
-  "theme-toggle",
+  "set-filter",
+  "toggle-theme",
 ]);
 
 // Event handlers
@@ -164,7 +164,7 @@ const handleAddTask = (taskText) => {
 };
 
 const handleToggleComplete = (taskId) => {
-  emit("toggle-complete", taskId);
+  emit("toggle-task", taskId);
 };
 
 const handleDeleteTask = (taskId) => {
@@ -172,11 +172,11 @@ const handleDeleteTask = (taskId) => {
 };
 
 const handleFilterChange = (filter) => {
-  emit("filter-change", filter);
+  emit("set-filter", filter);
 };
 
 const handleThemeToggle = (isDark) => {
-  emit("theme-toggle", isDark);
+  emit("toggle-theme", isDark);
 };
 </script>
 

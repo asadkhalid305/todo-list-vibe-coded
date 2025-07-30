@@ -4,13 +4,21 @@
  */
 
 import { ref, computed } from "vue";
+import type { Ref, ComputedRef } from "vue";
+import type {
+  Task,
+  FilterState,
+  FilterType,
+  SortBy,
+  SortOrder,
+} from "../types";
 
-export function useFilters(tasks) {
+export function useFilters(tasks: Ref<Task[]>) {
   // Reactive state
-  const currentFilter = ref("all");
-  const searchQuery = ref("");
-  const sortBy = ref("created"); // 'created', 'updated', 'alphabetical', 'completion'
-  const sortOrder = ref("asc"); // 'asc', 'desc'
+  const currentFilter: Ref<FilterType> = ref("all");
+  const searchQuery: Ref<string> = ref("");
+  const sortBy: Ref<SortBy> = ref("created");
+  const sortOrder: Ref<SortOrder> = ref("asc");
 
   // Available filters
   const availableFilters = [
@@ -23,12 +31,12 @@ export function useFilters(tasks) {
   const availableSortOptions = [
     { value: "created", label: "Date Created" },
     { value: "updated", label: "Last Updated" },
-    { value: "alphabetical", label: "Alphabetical" },
-    { value: "completion", label: "Completion Status" },
+    { value: "text", label: "Alphabetical" },
+    { value: "status", label: "Completion Status" },
   ];
 
   // Filter tasks by completion status
-  const filterByStatus = (tasks, filter) => {
+  const filterByStatus = (tasks: Task[], filter: FilterType): Task[] => {
     switch (filter) {
       case "pending":
         return tasks.filter((task) => !task.completed);
@@ -40,7 +48,7 @@ export function useFilters(tasks) {
   };
 
   // Filter tasks by search query
-  const filterBySearch = (tasks, query) => {
+  const filterBySearch = (tasks: Task[], query: string): Task[] => {
     if (!query.trim()) return tasks;
 
     const searchTerm = query.toLowerCase().trim();
@@ -48,30 +56,32 @@ export function useFilters(tasks) {
   };
 
   // Sort tasks
-  const sortTasks = (tasks, sortBy, sortOrder) => {
+  const sortTasks = (
+    tasks: Task[],
+    sortBy: SortBy,
+    sortOrder: SortOrder
+  ): Task[] => {
     const sorted = [...tasks].sort((a, b) => {
       let comparison = 0;
 
       switch (sortBy) {
-        case "alphabetical":
-          comparison = a.text.localeCompare(b.text);
-          break;
         case "updated":
           comparison =
-            new Date(a.updatedAt || a.createdAt) -
-            new Date(b.updatedAt || b.createdAt);
+            new Date(a.updatedAt || a.createdAt).getTime() -
+            new Date(b.updatedAt || b.createdAt).getTime();
           break;
-        case "completion":
-          // Sort by completion status, then by creation date
+        case "text":
+          comparison = a.text.localeCompare(b.text);
+          break;
+        case "status":
           if (a.completed !== b.completed) {
-            comparison = a.completed ? 1 : -1;
-          } else {
-            comparison = new Date(a.createdAt) - new Date(b.createdAt);
+            comparison =
+              new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
           }
           break;
-        case "created":
-        default:
-          comparison = new Date(a.createdAt) - new Date(b.createdAt);
+        default: // created
+          comparison =
+            new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
           break;
       }
 
@@ -134,55 +144,64 @@ export function useFilters(tasks) {
   });
 
   // Filter methods
-  const setFilter = (filter) => {
+  const setFilter = (filter: FilterType): void => {
     if (availableFilters.some((f) => f.value === filter)) {
       currentFilter.value = filter;
     }
   };
 
-  const setSearch = (query) => {
+  const setSearch = (query: string): void => {
     searchQuery.value = query;
   };
 
-  const clearSearch = () => {
+  const clearSearch = (): void => {
     searchQuery.value = "";
   };
 
-  const setSorting = (sort, order = "asc") => {
+  const setSorting = (sort: SortBy, order: SortOrder = "asc"): void => {
     if (availableSortOptions.some((s) => s.value === sort)) {
       sortBy.value = sort;
       sortOrder.value = order;
     }
   };
 
-  const toggleSortOrder = () => {
+  const toggleSortOrder = (): void => {
     sortOrder.value = sortOrder.value === "asc" ? "desc" : "asc";
   };
 
   // Quick filter actions
-  const showAll = () => setFilter("all");
-  const showPending = () => setFilter("pending");
-  const showCompleted = () => setFilter("completed");
+  const showAll = (): void => setFilter("all");
+  const showPending = (): void => setFilter("pending");
+  const showCompleted = (): void => setFilter("completed");
 
   // Advanced filtering
-  const filterByDateRange = (tasks, startDate, endDate) => {
+  const filterByDateRange = (
+    tasks: Task[],
+    startDate: string | Date,
+    endDate: string | Date
+  ): Task[] => {
     const start = new Date(startDate);
     const end = new Date(endDate);
 
-    return tasks.filter((task) => {
+    return tasks.filter((task: Task) => {
       const taskDate = new Date(task.createdAt);
       return taskDate >= start && taskDate <= end;
     });
   };
 
-  const filterByTextLength = (tasks, minLength = 0, maxLength = Infinity) => {
+  const filterByTextLength = (
+    tasks: Task[],
+    minLength = 0,
+    maxLength = Infinity
+  ): Task[] => {
     return tasks.filter(
-      (task) => task.text.length >= minLength && task.text.length <= maxLength
+      (task: Task) =>
+        task.text.length >= minLength && task.text.length <= maxLength
     );
   };
 
   // Get filter state for persistence
-  const getFilterState = () => {
+  const getFilterState = (): FilterState => {
     return {
       currentFilter: currentFilter.value,
       searchQuery: searchQuery.value,
@@ -192,7 +211,7 @@ export function useFilters(tasks) {
   };
 
   // Restore filter state
-  const restoreFilterState = (state) => {
+  const restoreFilterState = (state: FilterState): void => {
     if (state) {
       if (state.currentFilter) setFilter(state.currentFilter);
       if (state.searchQuery !== undefined) setSearch(state.searchQuery);

@@ -83,7 +83,7 @@
 
 <script setup>
 import { computed } from "vue";
-import { useTaskStatistics } from "@/composables/useTaskStatistics.js";
+import { useTaskStatistics } from "@/composables/useTaskStatistics";
 
 // Props definition
 const props = defineProps({

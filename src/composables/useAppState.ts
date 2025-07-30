@@ -4,25 +4,26 @@
  */
 
 import { onMounted, onUnmounted } from "vue";
-import { useTasks } from "./useTasks.js";
-import { useLocalStorage } from "./useLocalStorage.js";
-import { useTheme } from "./useTheme.js";
-import { useFilters } from "./useFilters.js";
+import type { StorageData, CleanupFunction } from "../types";
+import { useTasks } from "./useTasks";
+import { useLocalStorage } from "./useLocalStorage";
+import { useTheme } from "./useTheme";
+import { useFilters } from "./useFilters";
 
 export function useAppState() {
   // Initialize all composables
   const taskManager = useTasks();
-  const storage = useLocalStorage("vue-todo-app");
+  const storage = useLocalStorage();
   const theme = useTheme();
   const filters = useFilters(taskManager.tasks);
 
   // Cleanup functions
-  let cleanupAutoSave = null;
-  let cleanupCrossTabSync = null;
-  let cleanupBeforeUnload = null;
+  let cleanupAutoSave: CleanupFunction | null = null;
+  let cleanupCrossTabSync: CleanupFunction | null = null;
+  let cleanupBeforeUnload: CleanupFunction | null = null;
 
   // Initialize app data from storage
-  const initializeApp = () => {
+  const initializeApp = (): void => {
     const savedData = storage.loadFromStorage();
 
     if (savedData) {
@@ -30,7 +31,7 @@ export function useAppState() {
       if (savedData.tasks) {
         const { tasks: validatedTasks, nextId } = storage.validateTaskData(
           savedData.tasks,
-          savedData.nextId
+          savedData.nextTaskId || savedData.nextId || 1
         );
         taskManager.tasks.value = validatedTasks;
         taskManager.nextId.value = nextId;
@@ -39,13 +40,22 @@ export function useAppState() {
       // Restore theme
       theme.initializeFromData(savedData);
 
-      // Restore filters
-      filters.restoreFilterState({
-        currentFilter: savedData.currentFilter,
-        searchQuery: savedData.searchQuery,
-        sortBy: savedData.sortBy,
-        sortOrder: savedData.sortOrder,
-      });
+      // Restore filters if they exist in the legacy format
+      if (savedData.currentFilter || savedData.filters) {
+        filters.restoreFilterState({
+          currentFilter: (savedData.currentFilter ||
+            savedData.filters?.currentFilter ||
+            "all") as any,
+          searchQuery:
+            savedData.searchQuery || savedData.filters?.searchQuery || "",
+          sortBy: (savedData.sortBy ||
+            savedData.filters?.sortBy ||
+            "created") as any,
+          sortOrder: (savedData.sortOrder ||
+            savedData.filters?.sortOrder ||
+            "asc") as any,
+        });
+      }
     } else {
       // No saved data, initialize with sample data and system theme
       taskManager.initializeSampleData();
@@ -87,7 +97,7 @@ export function useAppState() {
 
       // Sync filters
       if (newData.currentFilter) {
-        filters.setFilter(newData.currentFilter);
+        filters.setFilter(newData.currentFilter as any);
       }
 
       // Sync theme (but don't override manual preference)
@@ -102,6 +112,7 @@ export function useAppState() {
     // Setup before unload save
     cleanupBeforeUnload = storage.setupBeforeUnloadSave(() => ({
       tasks: taskManager.tasks.value,
+      nextTaskId: taskManager.nextId.value,
       nextId: taskManager.nextId.value,
       currentFilter: filters.currentFilter.value,
       searchQuery: filters.searchQuery.value,
@@ -124,7 +135,7 @@ export function useAppState() {
     return storage.exportData();
   };
 
-  const importAppData = (jsonString) => {
+  const importAppData = (jsonString: string): boolean => {
     const success = storage.importData(jsonString);
     if (success) {
       // Reload app state after import

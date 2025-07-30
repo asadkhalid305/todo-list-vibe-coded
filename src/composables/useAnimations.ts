@@ -77,7 +77,10 @@ export const useAnimations = () => {
   };
 
   // Get animation styles based on preferences
-  const getAnimationStyle = (configKey, customConfig = {}) => {
+  const getAnimationStyle = (
+    configKey: keyof typeof animationConfigs,
+    customConfig: Record<string, any> = {}
+  ) => {
     const config = { ...animationConfigs[configKey], ...customConfig };
 
     if (prefersReducedMotion.value || !animationsEnabled.value) {
@@ -90,7 +93,7 @@ export const useAnimations = () => {
     return {
       transitionDuration: config.duration,
       transitionTimingFunction: config.easing,
-      transitionDelay: config.delay || "0ms",
+      transitionDelay: (config as any).delay || "0ms",
     };
   };
 
@@ -100,28 +103,32 @@ export const useAnimations = () => {
       name,
       css: false, // We'll use CSS classes instead
 
-      onEnter: (el, done) => {
-        if (prefersReducedMotion.value) {
+      onEnter: (el: HTMLElement, done: () => void) => {
+        if (prefersReducedMotion.value || !animationsEnabled.value) {
           done();
           return;
         }
 
+        // Set initial state
         el.style.opacity = "0";
         el.style.transform = "translateY(20px) scale(0.9)";
 
-        nextTick(() => {
+        requestAnimationFrame(() => {
           el.style.transition = `all ${animationConfigs.listEnter.duration} ${animationConfigs.listEnter.easing}`;
           el.style.opacity = "1";
           el.style.transform = "translateY(0) scale(1)";
 
-          setTimeout(
-            done,
-            parseFloat(animationConfigs.listEnter.duration) * 1000
-          );
+          const handleTransitionEnd = () => {
+            el.removeEventListener("transitionend", handleTransitionEnd);
+            el.style.transition = "";
+            done();
+          };
+
+          el.addEventListener("transitionend", handleTransitionEnd);
         });
       },
 
-      onLeave: (el, done) => {
+      onLeave: (el: HTMLElement, done: () => void) => {
         if (prefersReducedMotion.value) {
           done();
           return;
@@ -140,7 +147,7 @@ export const useAnimations = () => {
   };
 
   // Stagger animation for list items
-  const getStaggerDelay = (index, maxItems = 10) => {
+  const getStaggerDelay = (index: number, maxItems = 10): string => {
     if (prefersReducedMotion.value || !animationsEnabled.value) return "0ms";
 
     const { baseDelay, maxDelay } = animationConfigs.staggerEnter;
@@ -150,8 +157,8 @@ export const useAnimations = () => {
   };
 
   // Animation class helpers
-  const getAnimationClasses = (type, isActive = false) => {
-    const baseClasses = [];
+  const getAnimationClasses = (type: string, isActive = false): string[] => {
+    const baseClasses: string[] = [];
 
     if (prefersReducedMotion.value || !animationsEnabled.value) {
       return baseClasses;
@@ -209,7 +216,19 @@ export const useAnimations = () => {
   };
 
   // Programmatic animations
-  const animateElement = async (element, animation, options = {}) => {
+  // Animation configuration with proper typing
+  interface AnimationOptions {
+    duration?: number;
+    easing?: string;
+    delay?: number;
+    fill?: FillMode;
+  }
+
+  const animateElement = async (
+    element: HTMLElement,
+    animation: Keyframe[],
+    options: AnimationOptions = {}
+  ): Promise<void> => {
     if (!element || prefersReducedMotion.value || !animationsEnabled.value) {
       return Promise.resolve();
     }
@@ -233,8 +252,8 @@ export const useAnimations = () => {
 
       const animationInstance = element.animate(keyframes, animationOptions);
 
-      animationInstance.addEventListener("finish", resolve);
-      animationInstance.addEventListener("cancel", resolve);
+      animationInstance.addEventListener("finish", () => resolve());
+      animationInstance.addEventListener("cancel", () => resolve());
     });
   };
 
@@ -279,21 +298,21 @@ export const useAnimations = () => {
   };
 
   // Quick animation helpers
-  const fadeIn = (element, options) =>
+  const fadeIn = (element: HTMLElement, options?: AnimationOptions) =>
     animateElement(element, animations.fadeIn, options);
-  const fadeOut = (element, options) =>
+  const fadeOut = (element: HTMLElement, options?: AnimationOptions) =>
     animateElement(element, animations.fadeOut, options);
-  const slideInUp = (element, options) =>
+  const slideInUp = (element: HTMLElement, options?: AnimationOptions) =>
     animateElement(element, animations.slideInUp, options);
-  const slideOutDown = (element, options) =>
+  const slideOutDown = (element: HTMLElement, options?: AnimationOptions) =>
     animateElement(element, animations.slideOutDown, options);
-  const scaleIn = (element, options) =>
+  const scaleIn = (element: HTMLElement, options?: AnimationOptions) =>
     animateElement(element, animations.scaleIn, options);
-  const scaleOut = (element, options) =>
+  const scaleOut = (element: HTMLElement, options?: AnimationOptions) =>
     animateElement(element, animations.scaleOut, options);
-  const bounce = (element, options) =>
+  const bounce = (element: HTMLElement, options?: AnimationOptions) =>
     animateElement(element, animations.bounce, { duration: 600, ...options });
-  const shake = (element, options) =>
+  const shake = (element: HTMLElement, options?: AnimationOptions) =>
     animateElement(element, animations.shake, { duration: 400, ...options });
 
   // Setup
@@ -351,7 +370,7 @@ export const useListAnimations = () => {
 
   const listTransition = computed(() => createListTransition("task-list"));
 
-  const getItemAnimationStyle = (index) => {
+  const getItemAnimationStyle = (index: number) => {
     return {
       animationDelay: getStaggerDelay(index),
       ...(!prefersReducedMotion.value && {
@@ -360,7 +379,7 @@ export const useListAnimations = () => {
     };
   };
 
-  const getItemClasses = (index) => {
+  const getItemClasses = (index: number) => {
     const classes = getAnimationClasses("list-item");
 
     if (!prefersReducedMotion.value) {
@@ -388,8 +407,10 @@ export const useFormAnimations = () => {
   const getFormClasses = () => getAnimationClasses("form");
   const getButtonClasses = () => getAnimationClasses("button", true);
 
-  const animateError = (element) => shake(element, { duration: 400 });
-  const animateSuccess = (element) => bounce(element, { duration: 600 });
+  const animateError = (element: HTMLElement) =>
+    shake(element, { duration: 400 });
+  const animateSuccess = (element: HTMLElement) =>
+    bounce(element, { duration: 600 });
 
   return {
     getFormClasses,

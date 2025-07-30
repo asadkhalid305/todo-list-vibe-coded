@@ -24,12 +24,33 @@ export interface ShortcutOptions {
   stopPropagation?: boolean;
   element?: Document | Element;
   enabled?: boolean;
+  allowInInput?: boolean;
 }
 
 export interface RegisteredShortcut extends ShortcutOptions {
   id: string;
   keyCombo: KeyCombo;
   callback: (event: KeyboardEvent) => void;
+}
+
+export interface KeyboardShortcut extends KeyCombo {
+  id: string;
+  callback: (event: KeyboardEvent) => void;
+  options?: ShortcutOptions;
+  allowInInput?: boolean;
+}
+
+export interface FormHandlerOptions {
+  onSubmit?: (event: KeyboardEvent) => void;
+  onCancel?: (event: KeyboardEvent) => void;
+  onClear?: (event: KeyboardEvent) => void;
+}
+
+export interface InputKeyHandlers {
+  onEnter?: (event: KeyboardEvent) => void;
+  onEscape?: (event: KeyboardEvent) => void;
+  onArrowUp?: (event: KeyboardEvent) => void;
+  onArrowDown?: (event: KeyboardEvent) => void;
 }
 
 export interface ShortcutPreset {

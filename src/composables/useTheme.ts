@@ -4,19 +4,21 @@
  */
 
 import { ref, watch, onMounted, onUnmounted } from "vue";
+import type { Ref } from "vue";
+import type { ThemeInfo } from "../types";
 
 export function useTheme() {
   // Reactive state
-  const isDarkMode = ref(false);
-  const systemPreference = ref(false);
-  const hasManualPreference = ref(false);
+  const isDarkMode: Ref<boolean> = ref(false);
+  const systemPreference: Ref<boolean> = ref(false);
+  const hasManualPreference: Ref<boolean> = ref(false);
 
   // Media query for system preference
-  let mediaQuery = null;
-  let mediaQueryHandler = null;
+  let mediaQuery: MediaQueryList | null = null;
+  let mediaQueryHandler: ((event: MediaQueryListEvent) => void) | null = null;
 
   // Apply theme to DOM
-  const applyTheme = (dark) => {
+  const applyTheme = (dark: boolean): void => {
     if (dark) {
       document.documentElement.setAttribute("data-theme", "dark");
     } else {
@@ -25,31 +27,34 @@ export function useTheme() {
   };
 
   // Set theme manually (user preference)
-  const setTheme = (dark) => {
+  const setTheme = (dark: boolean): void => {
     isDarkMode.value = dark;
     hasManualPreference.value = true;
     applyTheme(dark);
   };
 
   // Toggle between light and dark
-  const toggleTheme = () => {
+  const toggleTheme = (): void => {
     setTheme(!isDarkMode.value);
   };
 
   // Reset to system preference
-  const useSystemPreference = () => {
+  const useSystemPreference = (): void => {
     hasManualPreference.value = false;
     isDarkMode.value = systemPreference.value;
     applyTheme(systemPreference.value);
   };
 
   // Get current theme info
-  const getThemeInfo = () => {
+  const getThemeInfo = (): ThemeInfo => {
     return {
-      current: isDarkMode.value ? "dark" : "light",
-      isSystemPreference: !hasManualPreference.value,
-      systemPreference: systemPreference.value ? "dark" : "light",
-      hasManualPreference: hasManualPreference.value,
+      isDark: isDarkMode.value,
+      mode: hasManualPreference.value
+        ? isDarkMode.value
+          ? "dark"
+          : "light"
+        : "auto",
+      systemPrefersDark: systemPreference.value,
     };
   };
 
@@ -98,7 +103,7 @@ export function useTheme() {
   };
 
   // Initialize theme from saved data
-  const initializeFromData = (savedData) => {
+  const initializeFromData = (savedData: any): void => {
     if (savedData && typeof savedData.isDarkMode === "boolean") {
       isDarkMode.value = savedData.isDarkMode;
       hasManualPreference.value = true;
@@ -118,21 +123,21 @@ export function useTheme() {
   };
 
   // CSS custom properties helpers
-  const getCSSVariable = (variable) => {
+  const getCSSVariable = (variable: string): string | null => {
     if (typeof window === "undefined") return null;
     return getComputedStyle(document.documentElement)
       .getPropertyValue(variable)
       .trim();
   };
 
-  const setCSSVariable = (variable, value) => {
+  const setCSSVariable = (variable: string, value: string): void => {
     if (typeof window === "undefined") return;
     document.documentElement.style.setProperty(variable, value);
   };
 
   // Theme color utilities
-  const getThemeColors = () => {
-    const colors = {};
+  const getThemeColors = (): Record<string, string | null> => {
+    const colors: Record<string, string | null> = {};
     const colorVariables = [
       "--bg-primary",
       "--bg-secondary",
@@ -154,12 +159,12 @@ export function useTheme() {
   };
 
   // Animation preferences
-  const respectsReducedMotion = () => {
+  const respectsReducedMotion = (): boolean => {
     if (typeof window === "undefined") return false;
     return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   };
 
-  const respectsHighContrast = () => {
+  const respectsHighContrast = (): boolean => {
     if (typeof window === "undefined") return false;
     return window.matchMedia("(prefers-contrast: high)").matches;
   };

@@ -2,6 +2,10 @@
   PAGE: Main App Component
   Root component that uses composables for state management
 -->
+<!-- 
+  PAGE: Main App Component
+  Root component that uses composables for state management
+-->
 <template>
   <TodoLayout
     :tasks="filteredTasks"
@@ -12,16 +16,16 @@
     :is-submitting="isSubmitting"
     :is-dark-mode="isDarkMode"
     @add-task="addTask"
-    @toggle-complete="toggleTask"
+    @toggle-task="toggleTask"
     @delete-task="deleteTask"
-    @filter-change="setFilter"
-    @theme-toggle="toggleTheme"
+    @set-filter="setFilter"
+    @toggle-theme="toggleTheme"
   />
 </template>
 
 <script setup>
 import TodoLayout from "./components/templates/TodoLayout.vue";
-import { useAppState } from "./composables/useAppState.js";
+import { useAppState } from "./composables/useAppState";
 
 // Use the main app state composable
 const {
@@ -40,6 +44,14 @@ const {
   toggleTheme,
 } = useAppState();
 </script>
+
+<style>
+/* Global styles that should not be scoped */
+#app {
+  width: 100%;
+  min-height: 100vh;
+}
+</style>
 
 <style>
 /* Global styles that should not be scoped */

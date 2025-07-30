@@ -4,15 +4,17 @@
  */
 
 import { ref, computed, nextTick } from "vue";
+import type { Ref, ComputedRef } from "vue";
+import type { Task } from "../types";
 
 export function useTasks() {
   // Reactive state
-  const tasks = ref([]);
-  const nextId = ref(1);
-  const isSubmitting = ref(false);
+  const tasks: Ref<Task[]> = ref([]);
+  const nextId: Ref<number> = ref(1);
+  const isSubmitting: Ref<boolean> = ref(false);
 
   // Computed properties
-  const sortedTasks = computed(() => {
+  const sortedTasks: ComputedRef<Task[]> = computed(() => {
     return [...tasks.value].sort((a, b) => {
       // Sort by completion status (pending first), then by creation order
       if (a.completed !== b.completed) {
@@ -22,11 +24,11 @@ export function useTasks() {
     });
   });
 
-  const completedTasks = computed(() =>
+  const completedTasks: ComputedRef<Task[]> = computed(() =>
     tasks.value.filter((task) => task.completed)
   );
 
-  const pendingTasks = computed(() =>
+  const pendingTasks: ComputedRef<Task[]> = computed(() =>
     tasks.value.filter((task) => !task.completed)
   );
 
@@ -41,7 +43,7 @@ export function useTasks() {
   }));
 
   // Task management methods
-  const addTask = async (taskText) => {
+  const addTask = async (taskText: string): Promise<Task | false> => {
     if (!taskText || !taskText.trim()) {
       return false;
     }
@@ -57,7 +59,7 @@ export function useTasks() {
       // Simulate async operation (e.g., API call)
       await new Promise((resolve) => setTimeout(resolve, 300));
 
-      const newTask = {
+      const newTask: Task = {
         id: nextId.value++,
         text: trimmedText,
         completed: false,
@@ -79,7 +81,7 @@ export function useTasks() {
     }
   };
 
-  const toggleTaskComplete = (taskId) => {
+  const toggleTaskComplete = (taskId: number): Task | null => {
     const task = tasks.value.find((t) => t.id === taskId);
     if (task) {
       task.completed = !task.completed;
@@ -89,7 +91,7 @@ export function useTasks() {
     return null;
   };
 
-  const deleteTask = (taskId) => {
+  const deleteTask = (taskId: number): Task | null => {
     const index = tasks.value.findIndex((t) => t.id === taskId);
     if (index > -1) {
       const deletedTask = tasks.value.splice(index, 1)[0];
@@ -98,7 +100,7 @@ export function useTasks() {
     return null;
   };
 
-  const updateTask = (taskId, updates) => {
+  const updateTask = (taskId: number, updates: Partial<Task>): Task | null => {
     const task = tasks.value.find((t) => t.id === taskId);
     if (task) {
       Object.assign(task, updates, {
@@ -109,18 +111,18 @@ export function useTasks() {
     return null;
   };
 
-  const clearCompleted = () => {
+  const clearCompleted = (): number => {
     const completedCount = completedTasks.value.length;
     tasks.value = tasks.value.filter((task) => !task.completed);
     return completedCount;
   };
 
-  const getTaskById = (taskId) => {
+  const getTaskById = (taskId: number): Task | undefined => {
     return tasks.value.find((t) => t.id === taskId);
   };
 
   // Bulk operations
-  const markAllComplete = () => {
+  const markAllComplete = (): void => {
     tasks.value.forEach((task) => {
       if (!task.completed) {
         task.completed = true;
@@ -129,7 +131,7 @@ export function useTasks() {
     });
   };
 
-  const markAllIncomplete = () => {
+  const markAllIncomplete = (): void => {
     tasks.value.forEach((task) => {
       if (task.completed) {
         task.completed = false;
@@ -139,7 +141,7 @@ export function useTasks() {
   };
 
   // Initialize with sample data
-  const initializeSampleData = () => {
+  const initializeSampleData = (): void => {
     tasks.value = [
       {
         id: 1,
@@ -167,7 +169,7 @@ export function useTasks() {
   };
 
   // Reset all data
-  const resetTasks = () => {
+  const resetTasks = (): void => {
     tasks.value = [];
     nextId.value = 1;
   };

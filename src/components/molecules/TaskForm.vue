@@ -67,8 +67,8 @@
 import { ref, nextTick, computed } from "vue";
 import BaseInput from "../atoms/BaseInput.vue";
 import BaseButton from "../atoms/BaseButton.vue";
-import { useTaskFormValidation } from "@/composables/useFormValidation.js";
-import { useFormKeyboard } from "@/composables/useKeyboardShortcuts.js";
+import { useTaskFormValidation } from "@/composables/useFormValidation";
+import { useFormKeyboard } from "@/composables/useKeyboardShortcuts";
 
 // Props definition
 const props = defineProps({

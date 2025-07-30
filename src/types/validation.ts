@@ -12,7 +12,9 @@ export interface ValidationRules {
   maxLength: (max: number) => ValidationRule;
   email: (value: any, fieldName: string) => string | null;
   pattern: (regex: RegExp, message: string) => ValidationRule;
-  custom: (validateFn: (value: any) => boolean | string) => ValidationRule;
+  custom: (
+    validateFn: (value: any) => boolean | string | null
+  ) => ValidationRule;
 }
 
 export interface FieldConfig {
@@ -25,6 +27,8 @@ export interface ValidationState {
   touched: Record<string, boolean>;
   isValid: boolean;
 }
+
+export type ValidationErrors = Record<string, string | null>;
 
 export interface ValidationOptions {
   validateOnBlur?: boolean;
