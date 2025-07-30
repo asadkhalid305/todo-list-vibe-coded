@@ -83,6 +83,7 @@
 
 <script setup>
 import { computed } from "vue";
+import { useTaskStatistics } from "@/composables/useTaskStatistics.js";
 
 // Props definition
 const props = defineProps({
@@ -100,31 +101,27 @@ const props = defineProps({
   },
 });
 
-// Computed properties
-const completionPercentage = computed(() => {
-  if (props.totalTasks === 0) return 0;
-  return Math.round((props.completedTasks / props.totalTasks) * 100);
-});
+// Create a reactive tasks array from props for the composable
+const tasksFromProps = computed(() => {
+  // Create mock tasks array based on props for statistics calculation
+  const tasks = [];
 
-const motivationalMessage = computed(() => {
-  if (props.totalTasks === 0) return "";
-
-  const percentage = completionPercentage.value;
-
-  if (percentage === 100) {
-    return "🎉 Amazing! All tasks completed!";
-  } else if (percentage >= 75) {
-    return "🔥 Almost there! Keep going!";
-  } else if (percentage >= 50) {
-    return "💪 Great progress! You're halfway done!";
-  } else if (percentage >= 25) {
-    return "🚀 Nice start! Keep up the momentum!";
-  } else if (props.completedTasks > 0) {
-    return "✨ Good job getting started!";
-  } else {
-    return "📝 Ready to tackle your tasks?";
+  // Add completed tasks
+  for (let i = 0; i < props.completedTasks; i++) {
+    tasks.push({ id: i, completed: true });
   }
+
+  // Add pending tasks
+  for (let i = props.completedTasks; i < props.totalTasks; i++) {
+    tasks.push({ id: i, completed: false });
+  }
+
+  return tasks;
 });
+
+// Use task statistics composable
+const { completionPercentage, motivationalMessage } =
+  useTaskStatistics(tasksFromProps);
 </script>
 
 <style scoped>

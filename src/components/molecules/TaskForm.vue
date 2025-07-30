@@ -64,9 +64,11 @@
 </template>
 
 <script setup>
-import { ref, nextTick } from "vue";
+import { ref, nextTick, computed } from "vue";
 import BaseInput from "../atoms/BaseInput.vue";
 import BaseButton from "../atoms/BaseButton.vue";
+import { useTaskFormValidation } from "@/composables/useFormValidation.js";
+import { useFormKeyboard } from "@/composables/useKeyboardShortcuts.js";
 
 // Props definition
 const props = defineProps({
@@ -81,38 +83,33 @@ const emit = defineEmits(["add-task"]);
 
 // Reactive data
 const newTaskText = ref("");
-const error = ref("");
 const inputRef = ref(null);
+
+// Use form validation composable
+const { getFieldError, clearFieldError, validateAndSubmit } =
+  useTaskFormValidation();
+
+// Get error for taskText field
+const error = computed(() => getFieldError("taskText"));
 
 // Methods
 const handleSubmit = async () => {
-  const trimmedText = newTaskText.value.trim();
+  const result = await validateAndSubmit(newTaskText.value, async (text) => {
+    emit("add-task", text);
+  });
 
-  if (!trimmedText) {
-    error.value = "Task cannot be empty";
+  if (result.success) {
+    newTaskText.value = "";
+    // Focus back to input after adding
     await nextTick();
     inputRef.value?.focus();
-    return;
   }
-
-  if (trimmedText.length > 200) {
-    error.value = "Task cannot exceed 200 characters";
-    return;
-  }
-
-  error.value = "";
-  emit("add-task", trimmedText);
-  newTaskText.value = "";
-
-  // Focus back to input after adding
-  await nextTick();
-  inputRef.value?.focus();
 };
 
 const handleKeydown = (event) => {
   // Clear error when user starts typing
-  if (error.value) {
-    error.value = "";
+  if (getFieldError("taskText")) {
+    clearFieldError("taskText");
   }
 
   // Handle Enter key
@@ -122,16 +119,24 @@ const handleKeydown = (event) => {
   }
 };
 
+// Setup keyboard shortcuts
+const keyboard = useFormKeyboard({
+  onSubmit: handleSubmit,
+  onClear: () => {
+    newTaskText.value = "";
+    clearFieldError("taskText");
+  },
+});
+
 // Expose methods for parent component
 defineExpose({
   focus: () => inputRef.value?.focus(),
   clear: () => {
     newTaskText.value = "";
-    error.value = "";
+    clearFieldError("taskText");
   },
 });
 </script>
-
 <style scoped>
 /* Accessibility improvements */
 @media (prefers-reduced-motion: reduce) {
