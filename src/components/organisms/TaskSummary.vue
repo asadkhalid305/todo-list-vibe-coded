@@ -4,10 +4,8 @@
 -->
 <template>
   <div
-    :class="[
-      'theme-summary-card border rounded-lg shadow-sm transition-all duration-300 p-6 sm:p-4 md:p-8',
-      totalTasks === 0 ? 'opacity-0 translate-y-2 pointer-events-none' : '',
-    ]"
+    v-if="totalTasks > 0"
+    class="theme-summary-card border rounded-lg shadow-sm transition-all duration-300 p-6 sm:p-4 md:p-8"
   >
     <div
       class="flex items-center justify-center gap-4 sm:gap-3 md:gap-6 mb-4 sm:mb-3 md:mb-6"

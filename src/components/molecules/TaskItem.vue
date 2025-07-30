@@ -26,18 +26,17 @@
       variant="danger"
       size="small"
       :aria-label="`Delete task '${task.text}'`"
+      class="!px-2 !py-2 !w-8 !h-8 !min-h-8 flex items-center justify-center rounded-full"
       @click="deleteTask"
     >
       <svg
-        class="w-4 h-4 sm:w-3.5 sm:h-3.5"
-        viewBox="0 0 20 20"
-        fill="currentColor"
+        class="w-3.5 h-3.5"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.5"
       >
-        <path
-          fill-rule="evenodd"
-          d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
-          clip-rule="evenodd"
-        />
+        <path d="M18 6L6 18M6 6l12 12" />
       </svg>
     </BaseButton>
   </div>

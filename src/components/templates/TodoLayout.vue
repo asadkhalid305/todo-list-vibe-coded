@@ -47,7 +47,7 @@
 
       <!-- Main content -->
       <main
-        class="flex-1 flex flex-col gap-6 sm:gap-4 md:gap-8 lg:gap-10 pb-8 sm:pb-6 lg:pb-12"
+        class="flex-1 flex flex-col gap-6 sm:gap-4 md:gap-8 lg:gap-10 pb-8 sm:pb-6 lg:pb-12 theme-bg-primary"
       >
         <!-- Add task form -->
         <section class="w-full" aria-label="Add new task">
@@ -70,7 +70,10 @@
         </section>
 
         <!-- Task list -->
-        <section class="w-full" aria-label="Task list">
+        <section
+          class="w-full min-h-[200px] flex flex-col"
+          aria-label="Task list"
+        >
           <TaskList
             :tasks="tasks"
             :current-filter="currentFilter"
@@ -80,17 +83,20 @@
         </section>
 
         <!-- Task summary -->
-        <section
-          v-if="tasks.length > 0"
-          class="w-full"
-          aria-label="Task summary"
-        >
-          <TaskSummary
-            :total-tasks="tasks.length"
-            :completed-tasks="completedTasks"
-            :pending-tasks="pendingTasks"
-          />
-        </section>
+        <Transition name="summary" mode="out-in">
+          <section
+            v-if="tasks.length > 0"
+            key="summary-present"
+            class="w-full"
+            aria-label="Task summary"
+          >
+            <TaskSummary
+              :total-tasks="tasks.length"
+              :completed-tasks="completedTasks"
+              :pending-tasks="pendingTasks"
+            />
+          </section>
+        </Transition>
       </main>
 
       <!-- Footer -->
@@ -185,11 +191,34 @@ const handleThemeToggle = (isDark) => {
   }
 }
 
+/* Task Summary Transition Animations */
+.summary-enter-active,
+.summary-leave-active {
+  transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.summary-enter-from {
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+}
+
+.summary-leave-to {
+  opacity: 0;
+  transform: translateY(-10px) scale(0.95);
+}
+
 /* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .duration-300,
-  .transition-all {
-    transition: none;
+  .transition-all,
+  .summary-enter-active,
+  .summary-leave-active {
+    transition: none !important;
+  }
+
+  .summary-enter-from,
+  .summary-leave-to {
+    transform: none;
   }
 }
 </style>

@@ -4,7 +4,7 @@
 -->
 <template>
   <form class="w-full" @submit.prevent="handleSubmit">
-    <div class="flex gap-3 items-start sm:gap-4">
+    <div class="flex gap-3 items-center sm:gap-4">
       <BaseInput
         ref="inputRef"
         v-model="newTaskText"
@@ -22,21 +22,20 @@
         size="large"
         :disabled="!newTaskText.trim() || isSubmitting"
         :aria-label="'Add new task'"
+        class="!px-3 !py-3 !w-12 !h-12 !min-h-12 flex items-center justify-center"
       >
         <svg
           v-if="!isSubmitting"
-          class="w-5 h-5 sm:w-4 sm:h-4"
-          viewBox="0 0 20 20"
-          fill="currentColor"
+          class="w-5 h-5"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
         >
-          <path
-            fill-rule="evenodd"
-            d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
-            clip-rule="evenodd"
-          />
+          <path d="M12 5v14M5 12h14" />
         </svg>
         <span v-else class="inline-flex items-center justify-center">
-          <svg class="w-5 h-5 sm:w-4 sm:h-4 animate-spin" viewBox="0 0 24 24">
+          <svg class="w-5 h-5 animate-spin" viewBox="0 0 24 24">
             <circle
               cx="12"
               cy="12"
@@ -51,9 +50,6 @@
               d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
             />
           </svg>
-        </span>
-        <span class="ml-2 hidden sm:inline">
-          {{ isSubmitting ? "Adding..." : "Add" }}
         </span>
       </BaseButton>
     </div>
