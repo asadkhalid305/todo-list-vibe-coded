@@ -2,7 +2,7 @@ import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import { resolve } from "path";
 
-// Vite configuration for Vue 3 Todo App
+// Vite configuration for Vue 3 Todo App with TypeScript support
 export default defineConfig({
   // Base URL for GitHub Pages deployment
   base: process.env.NODE_ENV === "production" ? "/todo-list-vibe-coded/" : "/",
