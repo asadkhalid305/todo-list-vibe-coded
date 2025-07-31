@@ -1,7 +1,8 @@
 {
   "name": "todo-app-with-ai",
   "version": "1.0.0",
-  "description": "Modern responsive To-Do List app with Vue 3, Tailwind CSS, and dark mode theming",
+  "type": "module",
+  "description": "Modern responsive To-Do List app with Vue 3, TypeScript, Tailwind CSS, and dark mode theming",
   "homepage": "https://asadkhalid305.github.io/todo-list-vibe-coded/",
   "main": "index.html",
   "scripts": {
@@ -13,22 +14,24 @@
     "deploy": "gh-pages -d dist"
   },
   "dependencies": {
-    "vue": "^3.4.0"
+    "vue": "^3.5.18"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.0.0",
+    "@tailwindcss/postcss": "^4.1.11",
+    "@vitejs/plugin-vue": "^6.0.1",
     "autoprefixer": "^10.4.21",
     "gh-pages": "^6.3.0",
     "postcss": "^8.5.6",
     "sass": "^1.89.2",
-    "tailwindcss": "^3.4.17",
-    "typescript": "^5.6.0",
-    "vite": "^5.0.0",
-    "vue-tsc": "^2.0.0"
+    "tailwindcss": "^4.1.11",
+    "typescript": "^5.8.3",
+    "vite": "^7.0.6",
+    "vue-tsc": "^3.0.4"
   },
   "keywords": [
     "vue",
     "vue3",
+    "typescript",
     "todo",
     "todolist",
     "tailwindcss",

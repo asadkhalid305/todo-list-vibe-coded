@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   // Scan these files for Tailwind classes
   content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
 

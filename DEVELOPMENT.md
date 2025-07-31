@@ -1,9 +1,11 @@
-# Development Guide - Vue 3 Todo App 🚀
+# Development Guide - Vue 3 TypeScript Todo App 🚀
 
 ## 📋 Table of Contents
 
 - [Quick Start](#quick-start)
+- [TypeScript Development](#typescript-development)
 - [Project Structure](#project-structure)
+- [Branching Strategy](#branching-strategy)
 - [Development Guidelines](#development-guidelines)
 - [Styling Guide](#styling-guide)
 - [Component Architecture](#component-architecture)
@@ -15,7 +17,7 @@
 
 ```bash
 # Prerequisites
-node --version  # v16 or higher
+node --version  # v18 or higher
 npm --version   # v8 or higher
 
 # Clone and setup
@@ -24,50 +26,164 @@ cd todo-app-with-ai
 npm install
 
 # Development
-npm run dev     # Start dev server (usually http://localhost:3001)
-npm run build   # Build for production
-npm run preview # Preview production build
+npm run dev         # Start dev server (usually http://localhost:3001)
+npm run type-check  # Run TypeScript type checking
+npm run build       # Type check + build for production
+npm run preview     # Preview production build
 ```
 
 ### Development Commands
 
 ```bash
+# TypeScript commands
+npm run type-check  # Run type checking without building
+npm run build      # Type check + build for production
+
 # Install new dependencies
 npm install package-name
 npm install -D dev-package-name
 
 # Check for updates
 npm outdated
+```
+
+## 📝 TypeScript Development
+
+### Type Safety Requirements
+
+This project maintains **100% TypeScript coverage**. All new code must:
+
+- ✅ **Use TypeScript** - No JavaScript files in `src/` directory
+- ✅ **Define proper interfaces** for component props and emits
+- ✅ **Type composable returns** with explicit return types
+- ✅ **Pass type checking** - `npm run type-check` must succeed
+- ✅ **Follow type conventions** - Use existing patterns in `src/types/`
+
+### Working with Types
+
+```typescript
+// Component Props & Emits
+interface Props {
+  tasks: Task[];
+  currentFilter: FilterType;
+}
+
+interface Emits {
+  (e: "filter-change", filter: FilterType): void;
+  (e: "task-toggle", taskId: number): void;
+}
+
+// Composable with typed return
+export function useTaskFilter(tasks: Ref<Task[]>) {
+  const filteredTasks = computed((): Task[] => {
+    // Implementation
+  });
+
+  return {
+    filteredTasks,
+  } as const;
+}
+```
+
+### Type Organization
+
+- **`src/types/components.ts`** - Component prop/emit interfaces
+- **`src/types/task.ts`** - Task-related types and interfaces
+- **`src/types/filter.ts`** - Filter types and enums
+- **`src/types/theme.ts`** - Theme and styling types
+- **`src/types/index.ts`** - Re-exports for easy importing
+
+## 🌿 Branching Strategy
+
+This project uses a **GitFlow-inspired strategy** for clean development:
+
+### Branch Overview
+
+```
+main (production)     ──●──●──●── (auto-deploy)
+                        /  /  /
+develop (integration) ●──●──●──●── (CI/CD tests)
+                      │
+feature/* (optional)  ●──●──
+```
+
+### Workflow
+
+1. **Development**: Work on `develop` branch
+2. **Feature branches**: Optional for complex features
+3. **Pull Requests**: `develop` → `main` for releases
+4. **Deployment**: Automatic from `main` to GitHub Pages
+
+### Commands
+
+```bash
+# Start new work
+git checkout develop
+git pull origin develop
+
+# Feature development (optional)
+git checkout -b feature/new-feature
+# ... work ...
+git checkout develop
+git merge feature/new-feature
+
+# Release to production
+git checkout main
+git merge develop
+git push origin main  # Triggers deployment
+```
+
 npm update
 
 # Clean install
+
 rm -rf node_modules package-lock.json
 npm install
+
 ```
 
 ## 📁 Project Structure
 
 ```
+
 todo-app-with-ai/
-├── public/                 # Static assets
+├── .github/
+│ └── workflows/
+│ └── deploy.yml # CI/CD GitHub Actions
+├── public/ # Static assets
 ├── src/
-│   ├── components/         # Vue components (Atomic Design)
-│   │   ├── atoms/         # Base components
-│   │   ├── molecules/     # Simple combinations
-│   │   ├── organisms/     # Complex components
-│   │   └── templates/     # Layout templates
-│   ├── composables/       # Vue composables
-│   ├── styles/           # SCSS and styling
-│   │   ├── main.scss     # Main entry point
-│   │   └── scss/         # Theme files
-│   ├── App.vue           # Root component
-│   └── main.js           # App entry point
-├── index.html            # HTML template
-├── package.json          # Dependencies & scripts
-├── tailwind.config.js    # Tailwind configuration
-├── vite.config.js        # Vite configuration
-└── README.md            # Documentation
+│ ├── components/ # Vue components (Atomic Design + TypeScript)
+│ │ ├── atoms/ # Base components (.vue with TypeScript)
+│ │ ├── molecules/ # Simple combinations (.vue with TypeScript)
+│ │ ├── organisms/ # Complex components (.vue with TypeScript)
+│ │ └── templates/ # Layout templates (.vue with TypeScript)
+│ ├── composables/ # Vue composables (.ts files)
+│ ├── types/ # TypeScript type definitions
+│ │ ├── components.ts # Component prop/emit interfaces
+│ │ ├── task.ts # Task-related types
+│ │ ├── filter.ts # Filter types
+│ │ ├── theme.ts # Theme types
+│ │ └── index.ts # Type exports
+│ ├── styles/ # SCSS and styling
+│ │ ├── main.scss # Main entry point
+│ │ └── scss/ # Theme files
+│ ├── App.vue # Root component (TypeScript)
+│ └── main.ts # App entry point (TypeScript)
+├── index.html # HTML template
+├── package.json # Dependencies & scripts
+├── tailwind.config.js # Tailwind configuration
+├── tsconfig.json # TypeScript configuration
+├── vite.config.js # Vite configuration
+└── README.md # Documentation
+
 ```
+
+### File Naming Conventions
+
+- **Vue Components**: PascalCase (e.g., `BaseButton.vue`, `TaskForm.vue`)
+- **TypeScript Files**: camelCase (e.g., `useTasks.ts`, `useTheme.ts`)
+- **Type Files**: camelCase (e.g., `components.ts`, `task.ts`)
+- **CSS/SCSS Files**: kebab-case (e.g., `main.scss`, `theme-variables.scss`)
 
 ## 🛠️ Development Guidelines
 
@@ -75,45 +191,91 @@ todo-app-with-ai/
 
 1. **Determine Atomic Level**
 
+```
+
+Atoms: BaseButton, BaseInput, BaseCheckbox
+Molecules: TaskItem, TaskForm, FilterTabs
+Organisms: TaskList, TaskSummary
+Templates: TodoLayout
+
+````
+
+2. **TypeScript Component Template**
+
+```vue
+<!--
+  ATOM/MOLECULE/ORGANISM: Component Name
+  Brief description of component purpose
+-->
+<template>
+  <!-- Component HTML with Tailwind classes -->
+</template>
+
+<script setup lang="ts">
+import { ref, computed } from "vue";
+import type { SomeType } from "@/types/domain";
+
+// Props interface
+interface Props {
+  prop1: string;
+  prop2?: number;
+}
+
+// Emits interface
+interface Emits {
+  (e: 'event-name', value: string): void;
+}
+
+// Define props and emits
+const props = withDefaults(defineProps<Props>(), {
+  prop2: 0
+});
+
+const emit = defineEmits<Emits>();
+
+// Reactive data with proper typing
+const someValue = ref<string>('');
+
+// Computed properties with inferred types
+const computedValue = computed((): string => {
+  return props.prop1.toUpperCase();
+});
+
+// Methods with explicit return types
+const handleClick = (): void => {
+  emit('event-name', someValue.value);
+};
+</script>
+
+<style scoped>
+/* Component-specific styles */
+</style>
+````
+
+3. **Type Definition Pattern**
+
+   ```typescript
+   // In src/types/components.ts
+   export interface ComponentNameProps {
+     prop1: string;
+     prop2?: number;
+   }
+
+   export interface ComponentNameEmits {
+     (e: "event-name", value: string): void;
+   }
    ```
-   Atoms:      BaseButton, BaseInput, BaseCheckbox
-   Molecules:  TaskItem, TaskForm, FilterTabs
-   Organisms:  TaskList, TaskSummary
-   Templates:  TodoLayout
-   ```
 
-2. **Component Template**
-
-   ```vue
-   <!-- 
-     ATOM/MOLECULE/ORGANISM: Component Name
-     Brief description of component purpose
-   -->
-   <template>
-     <!-- Component HTML with Tailwind classes -->
-   </template>
-
-   <script>
-   import { ref, computed } from "vue";
-
-   export default {
-     name: "ComponentName",
-     props: {
-       // Define props with validation
-     },
-     emits: ["event-name"],
-     setup(props, { emit }) {
-       // Composition API logic
-       return {
-         // Reactive data and methods
-       };
-     },
+   },
    };
    </script>
 
    <style scoped lang="scss">
    /* Only when Tailwind utilities aren't sufficient */
    </style>
+
+   ```
+
    ```
 
 ### Code Style
